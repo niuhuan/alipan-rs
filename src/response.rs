@@ -1,5 +1,4 @@
 use serde_derive::{Deserialize, Serialize};
-use std::thread::Scope;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OauthAccessToken {

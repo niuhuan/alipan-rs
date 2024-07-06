@@ -80,3 +80,11 @@ async fn test_oauth_users_info() -> anyhow::Result<()> {
     println!("{:?}", users_info);
     Ok(())
 }
+
+#[tokio::test]
+async fn test_oauth_users_scopes() -> anyhow::Result<()> {
+    let client = client().await;
+    let users_scopes = client.api_oauth_users_scopes().await.request().await?;
+    println!("{:?}", users_scopes);
+    Ok(())
+}

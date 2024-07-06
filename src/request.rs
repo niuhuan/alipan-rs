@@ -25,22 +25,46 @@ pub struct OauthAuthorizeUrl {
 }
 
 impl OauthAuthorizeUrl {
+    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
+        self.api_host = Arc::new(api_host.into());
+        self
+    }
+
+    pub fn client_id(mut self, client_id: impl Into<String>) -> Self {
+        self.client_id = Arc::new(client_id.into());
+        self
+    }
+
     pub fn redirect_uri(mut self, redirect_uri: impl Into<String>) -> Self {
         self.redirect_uri = redirect_uri.into();
         self
     }
+
     pub fn scope(mut self, scope: impl Into<String>) -> Self {
         self.scope = scope.into();
         self
     }
+
     pub fn response_type(mut self, response_type: impl Into<String>) -> Self {
         self.response_type = response_type.into();
         self
     }
+
     pub fn state(mut self, state: impl Into<String>) -> Self {
         self.state = Some(state.into());
         self
     }
+
+    pub fn relogin(mut self, relogin: bool) -> Self {
+        self.relogin = Some(relogin);
+        self
+    }
+
+    pub fn drive(mut self, drive: impl Into<String>) -> Self {
+        self.drive = Some(drive.into());
+        self
+    }
+
     pub fn build(&self) -> Result<String> {
         if self.client_id.is_empty() {
             return Err(Error::msg("client_id is required"));
@@ -91,6 +115,26 @@ pub struct OauthAccessTokenRequest {
 }
 
 impl OauthAccessTokenRequest {
+    pub fn agent(mut self, agent: Arc<reqwest::Client>) -> Self {
+        self.agent = agent;
+        self
+    }
+
+    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
+        self.api_host = Arc::new(api_host.into());
+        self
+    }
+
+    pub fn client_id(mut self, client_id: impl Into<String>) -> Self {
+        self.client_id = Arc::new(client_id.into());
+        self
+    }
+
+    pub fn client_secret(mut self, client_secret: impl Into<String>) -> Self {
+        self.client_secret = Arc::new(client_secret.into());
+        self
+    }
+
     pub fn grant_type(mut self, grant_type: impl Into<GrantType>) -> Self {
         self.grant_type = grant_type.into();
         self
@@ -100,14 +144,17 @@ impl OauthAccessTokenRequest {
         self.code = Some(code.into());
         self
     }
+
     pub fn refresh_token(mut self, refresh_token: impl Into<String>) -> Self {
         self.refresh_token = Some(refresh_token.into());
         self
     }
+
     pub fn code_verifier(mut self, code_verifier: impl Into<String>) -> Self {
         self.code_verifier = Some(code_verifier.into());
         self
     }
+
     pub async fn request(&self) -> Result<OauthAccessToken> {
         let mut form = HashMap::<&str, &str>::new();
         form.insert("client_id", self.client_id.as_str());
@@ -207,6 +254,16 @@ pub struct OauthUsersInfoRequest {
 }
 
 impl OauthUsersInfoRequest {
+    pub fn agent(mut self, agent: Arc<reqwest::Client>) -> Self {
+        self.agent = agent;
+        self
+    }
+
+    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
+        self.api_host = Arc::new(api_host.into());
+        self
+    }
+
     pub async fn request(&self) -> Result<OauthUsersInfo> {
         let token = self.access_token.load_access_token().await?;
         let resp = self
@@ -226,6 +283,16 @@ pub struct OauthUsersScopesRequest {
 }
 
 impl OauthUsersScopesRequest {
+    pub fn agent(mut self, agent: Arc<reqwest::Client>) -> Self {
+        self.agent = agent;
+        self
+    }
+
+    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
+        self.api_host = Arc::new(api_host.into());
+        self
+    }
+
     pub async fn request(&self) -> Result<OauthUsersScopes> {
         let token = self.access_token.load_access_token().await?;
         let resp = self
