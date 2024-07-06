@@ -1,0 +1,30 @@
+[package]
+name = "alipan"
+version = "0.0.1"
+edition = "2021"
+description = "alipan sdk for rust"
+license = "MPL-2"
+repository = "https://github.com/niuhuan/alipan-rs"
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false }
+tokio = { ersion = "1", features = ["sync"], default-features = false }
+url = "2"
+serde_json = "1"
+serde = "1"
+serde_derive = "1"
+async-trait = "0.1"
+chrono = "0.4"
+
+[features]
+default = ["reqwest/default"]
+native-tls = ["reqwest/native-tls"]
+rustls-tls = ["reqwest/rustls-tls"]
+rustls-tls-manual-roots = ["reqwest/rustls-tls-manual-roots"]
+rustls-tls-native-roots = ["reqwest/rustls-tls-native-roots"]
+rustls-tls-webpki-roots = ["reqwest/rustls-tls-webpki-roots"]
+backtrace = []
+
+[dev-dependencies]
+anyhow = "1"
+tokio = { version = "1", features = ["rt", "macros", "fs"] }
