@@ -72,3 +72,11 @@ async fn load_file(path: &str) -> anyhow::Result<String> {
     file.read_to_string(&mut content).await?;
     Ok(content.trim().to_string())
 }
+
+#[tokio::test]
+async fn test_oauth_users_info() -> anyhow::Result<()> {
+    let client = client().await;
+    let users_info = client.api_oauth_users_info().await.request().await?;
+    println!("{:?}", users_info);
+    Ok(())
+}

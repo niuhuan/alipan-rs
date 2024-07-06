@@ -11,3 +11,11 @@ pub struct OauthAccessToken {
     /// expires_in
     pub expires_in: i64,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthUsersInfo {
+    pub id: String,
+    pub name: String,
+    pub avatar: String,
+    pub phone: Option<String>,
+}

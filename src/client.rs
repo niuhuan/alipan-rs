@@ -83,6 +83,22 @@ impl Client {
         }
     }
 
+    pub async fn api_oauth_users_info(&self) -> OauthUsersInfoRequest {
+        let agent = self.agent.lock().await.clone();
+        let api_host = self.api_host.lock().await.clone();
+        OauthUsersInfoRequest {
+            agent: agent.clone(),
+            api_host: api_host.clone(),
+            access_token: AccessTokenLoader {
+                agent,
+                api_host,
+                client_id: self.client_id.lock().await.clone(),
+                client_secret: self.client_secret.lock().await.clone(),
+                access_token_store: self.access_token_store.lock().await.clone(),
+            },
+        }
+    }
+
     pub async fn client_oauth_parse_code(&self, code: &str) -> Result<AccessToken> {
         let token = self
             .api_oauth_access_token()
@@ -112,28 +128,5 @@ impl Client {
         let token_store = self.access_token_store.lock().await;
         token_store.set_access_token(access_token.clone()).await?;
         Ok(access_token)
-    }
-
-    pub async fn client_require_access_token(&self) -> Result<AccessToken> {
-        let token_store = self.access_token_store.lock().await;
-        let token = token_store.get_access_token().await?;
-        match token {
-            Some(token) => {
-                let now = chrono::Utc::now().timestamp();
-                if now - token.created_at < token.expires_in * 3 / 4 {
-                    return Ok(token);
-                }
-            }
-            None => return Err(Error::msg("no access token")),
-        }
-        let token = self
-            .api_oauth_access_token()
-            .await
-            .grant_type(GrantType::RefreshToken)
-            .request()
-            .await?;
-        Ok(self
-            .client_oauth_parse_refresh_token(token.refresh_token.as_str())
-            .await?)
     }
 }

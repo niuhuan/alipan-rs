@@ -1,3 +1,5 @@
+use super::response::*;
+use crate::access_token_store::{AccessToken, BoxedAccessTokenStore};
 use crate::common::GrantType;
 use crate::{AlipanError, Error, OauthAccessToken, Result};
 use std::collections::HashMap;
@@ -143,12 +145,76 @@ impl OauthAccessTokenRequest {
             .form(&form)
             .send()
             .await?;
-        let code = resp.status();
-        let text = resp.text().await?;
-        if !code.is_success() {
-            return Err(AlipanError::server(code, text.as_str()));
+        response(resp).await
+    }
+}
+
+async fn response<T: for<'de> serde::Deserialize<'de>>(response: reqwest::Response) -> Result<T> {
+    let code = response.status();
+    let text = response.text().await?;
+    if !code.is_success() {
+        return Err(AlipanError::server(code, text.as_str()));
+    }
+    let data: T = serde_json::from_str(&text)?;
+    Ok(data)
+}
+
+pub struct AccessTokenLoader {
+    pub agent: Arc<reqwest::Client>,
+    pub api_host: Arc<String>,
+    pub client_id: Arc<String>,
+    pub client_secret: Arc<String>,
+    pub access_token_store: Arc<BoxedAccessTokenStore>,
+}
+
+impl AccessTokenLoader {
+    pub async fn load_access_token(&self) -> Result<AccessToken> {
+        let token = self.access_token_store.get_access_token().await?;
+        let token = match token {
+            Some(token) => {
+                let now = chrono::Utc::now().timestamp();
+                if now - token.created_at < token.expires_in * 3 / 4 {
+                    return Ok(token);
+                }
+                token
+            }
+            None => return Err(Error::msg("no access token")),
+        };
+        let token = OauthAccessTokenRequest {
+            agent: self.agent.clone(),
+            api_host: self.api_host.clone(),
+            client_id: self.client_id.clone(),
+            client_secret: self.client_secret.clone(),
+            grant_type: GrantType::RefreshToken,
+            code: None,
+            refresh_token: Some(token.refresh_token),
+            code_verifier: None,
         }
-        let token: OauthAccessToken = serde_json::from_str(&text)?;
-        Ok(token)
+        .request()
+        .await?;
+        let access_token = AccessToken::wrap_oauth_token(token);
+        self.access_token_store
+            .set_access_token(access_token.clone())
+            .await?;
+        Ok(access_token)
+    }
+}
+
+pub struct OauthUsersInfoRequest {
+    pub agent: Arc<reqwest::Client>,
+    pub api_host: Arc<String>,
+    pub access_token: AccessTokenLoader,
+}
+
+impl OauthUsersInfoRequest {
+    pub async fn request(&self) -> Result<OauthUsersInfo> {
+        let token = self.access_token.load_access_token().await?;
+        let resp = self
+            .agent
+            .get(format!("{}/oauth/users/info", self.api_host.as_str()).as_str())
+            .header("Authorization", format!("Bearer {}", token.access_token))
+            .send()
+            .await?;
+        response(resp).await
     }
 }
