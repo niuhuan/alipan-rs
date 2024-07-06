@@ -99,6 +99,24 @@ impl Client {
         }
     }
 
+    // /oauth/users/scopes
+
+    pub async fn api_oauth_users_scopes(&self) -> OauthUsersScopesRequest {
+        let agent = self.agent.lock().await.clone();
+        let api_host = self.api_host.lock().await.clone();
+        OauthUsersScopesRequest {
+            agent: agent.clone(),
+            api_host: api_host.clone(),
+            access_token: AccessTokenLoader {
+                agent,
+                api_host,
+                client_id: self.client_id.lock().await.clone(),
+                client_secret: self.client_secret.lock().await.clone(),
+                access_token_store: self.access_token_store.lock().await.clone(),
+            },
+        }
+    }
+
     pub async fn client_oauth_parse_code(&self, code: &str) -> Result<AccessToken> {
         let token = self
             .api_oauth_access_token()

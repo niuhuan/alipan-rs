@@ -1,4 +1,5 @@
 use serde_derive::{Deserialize, Serialize};
+use std::thread::Scope;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OauthAccessToken {
@@ -18,4 +19,15 @@ pub struct OauthUsersInfo {
     pub name: String,
     pub avatar: String,
     pub phone: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthUsersScopes {
+    pub id: String,
+    pub scopes: Vec<OauthUsersScope>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthUsersScope {
+    pub scope: String,
 }
