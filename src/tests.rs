@@ -41,6 +41,11 @@ async fn client() -> Client {
         .await
 }
 
+async fn drive_id() -> anyhow::Result<String> {
+    let content = tokio::fs::read_to_string("target/drive_id.txt").await?;
+    Ok(content.trim().to_string())
+}
+
 #[tokio::test]
 async fn test_oauth_authorize() -> anyhow::Result<()> {
     let client = client().await;
@@ -94,5 +99,18 @@ async fn test_adrive_user_get_drive_info() -> anyhow::Result<()> {
     let client = client().await;
     let drive_info = client.adrive_user_get_drive_info().await.request().await?;
     println!("{:?}", drive_info);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_list() -> anyhow::Result<()> {
+    let client = client().await;
+    let open_file_list = client
+        .adrive_open_file_list()
+        .await
+        .drive_id(drive_id().await?)
+        .request()
+        .await?;
+    println!("{:?}", open_file_list);
     Ok(())
 }

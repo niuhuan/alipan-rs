@@ -70,3 +70,8 @@ enum_str!(GrantType {
     AuthorizationCode("authorization_code"),
     RefreshToken("refresh_token"),
 });
+
+enum_str! (AdriveOpenFileType {
+    File("file"),
+    Folder("folder"),
+});

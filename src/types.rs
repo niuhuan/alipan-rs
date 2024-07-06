@@ -52,6 +52,7 @@ impl std::error::Error for AlipanError {}
 pub enum ErrorInfo {
     ReqwestError(reqwest::Error),
     SerdeJsonError(serde_json::Error),
+    SerdeJsonErrorPath(serde_path_to_error::Error<serde_json::Error>),
     UrlParseError(url::ParseError),
     ServerError(ServerError),
     // todo: split into more specific error types
@@ -82,6 +83,12 @@ impl From<reqwest::Error> for AlipanError {
 impl From<serde_json::Error> for AlipanError {
     fn from(e: serde_json::Error) -> Self {
         AlipanError::new(ErrorInfo::SerdeJsonError(e))
+    }
+}
+
+impl From<serde_path_to_error::Error<serde_json::Error>> for AlipanError {
+    fn from(e: serde_path_to_error::Error<serde_json::Error>) -> Self {
+        AlipanError::new(ErrorInfo::SerdeJsonErrorPath(e))
     }
 }
 
