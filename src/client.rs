@@ -84,66 +84,34 @@ impl Client {
     }
 
     pub async fn oauth_users_info(&self) -> OauthUsersInfoRequest {
-        let agent = self.agent.lock().await.clone();
-        let api_host = self.api_host.lock().await.clone();
         OauthUsersInfoRequest {
-            agent: agent.clone(),
-            api_host: api_host.clone(),
-            access_token: AccessTokenLoader {
-                agent,
-                api_host,
-                client_id: self.client_id.lock().await.clone(),
-                client_secret: self.client_secret.lock().await.clone(),
-                access_token_store: self.access_token_store.lock().await.clone(),
-            },
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
         }
     }
 
     pub async fn oauth_users_scopes(&self) -> OauthUsersScopesRequest {
-        let agent = self.agent.lock().await.clone();
-        let api_host = self.api_host.lock().await.clone();
         OauthUsersScopesRequest {
-            agent: agent.clone(),
-            api_host: api_host.clone(),
-            access_token: AccessTokenLoader {
-                agent,
-                api_host,
-                client_id: self.client_id.lock().await.clone(),
-                client_secret: self.client_secret.lock().await.clone(),
-                access_token_store: self.access_token_store.lock().await.clone(),
-            },
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
         }
     }
 
     pub async fn adrive_user_get_drive_info(&self) -> AdriveUserGetDriveInfoRequest {
-        let agent = self.agent.lock().await.clone();
-        let api_host = self.api_host.lock().await.clone();
         AdriveUserGetDriveInfoRequest {
-            agent: agent.clone(),
-            api_host: api_host.clone(),
-            access_token: AccessTokenLoader {
-                agent,
-                api_host,
-                client_id: self.client_id.lock().await.clone(),
-                client_secret: self.client_secret.lock().await.clone(),
-                access_token_store: self.access_token_store.lock().await.clone(),
-            },
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
         }
     }
 
     pub async fn adrive_open_file_list(&self) -> AdriveOpenFileListRequest {
-        let agent = self.agent.lock().await.clone();
-        let api_host = self.api_host.lock().await.clone();
         AdriveOpenFileListRequest {
-            agent: agent.clone(),
-            api_host: api_host.clone(),
-            access_token: AccessTokenLoader {
-                agent,
-                api_host,
-                client_id: self.client_id.lock().await.clone(),
-                client_secret: self.client_secret.lock().await.clone(),
-                access_token_store: self.access_token_store.lock().await.clone(),
-            },
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
             drive_id: "".to_string(),
             limit: None,
             marker: None,
@@ -157,6 +125,24 @@ impl Client {
             image_thumbnail_width: None,
             fields: None,
         }
+    }
+
+    async fn access_token_loader(&self) -> AccessTokenLoader {
+        AccessTokenLoader {
+            agent: self.agent.lock().await.clone(),
+            api_host: self.api_host.lock().await.clone(),
+            client_id: self.client_id.lock().await.clone(),
+            client_secret: self.client_secret.lock().await.clone(),
+            access_token_store: self.access_token_store.lock().await.clone(),
+        }
+    }
+
+    pub async fn clone_agent(&self) -> Arc<reqwest::Client> {
+        self.agent.lock().await.clone()
+    }
+
+    async fn clone_api_host(&self) -> Arc<String> {
+        self.api_host.lock().await.clone()
     }
 
     pub async fn client_oauth_parse_code(&self, code: &str) -> Result<AccessToken> {
