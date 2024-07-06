@@ -57,7 +57,7 @@ impl Client {
         self
     }
 
-    pub async fn api_oauth_authorize(&self) -> OauthAuthorizeUrl {
+    pub async fn oauth_authorize(&self) -> OauthAuthorizeUrl {
         OauthAuthorizeUrl {
             api_host: self.api_host.lock().await.clone(),
             client_id: self.client_id.lock().await.clone(),
@@ -70,7 +70,7 @@ impl Client {
         }
     }
 
-    pub async fn api_oauth_access_token(&self) -> OauthAccessTokenRequest {
+    pub async fn oauth_access_token(&self) -> OauthAccessTokenRequest {
         OauthAccessTokenRequest {
             agent: self.agent.lock().await.clone(),
             api_host: self.api_host.lock().await.clone(),
@@ -83,7 +83,7 @@ impl Client {
         }
     }
 
-    pub async fn api_oauth_users_info(&self) -> OauthUsersInfoRequest {
+    pub async fn oauth_users_info(&self) -> OauthUsersInfoRequest {
         let agent = self.agent.lock().await.clone();
         let api_host = self.api_host.lock().await.clone();
         OauthUsersInfoRequest {
@@ -99,9 +99,7 @@ impl Client {
         }
     }
 
-    // /oauth/users/scopes
-
-    pub async fn api_oauth_users_scopes(&self) -> OauthUsersScopesRequest {
+    pub async fn oauth_users_scopes(&self) -> OauthUsersScopesRequest {
         let agent = self.agent.lock().await.clone();
         let api_host = self.api_host.lock().await.clone();
         OauthUsersScopesRequest {
@@ -117,9 +115,53 @@ impl Client {
         }
     }
 
+    pub async fn adrive_user_get_drive_info(&self) -> AdriveUserGetDriveInfoRequest {
+        let agent = self.agent.lock().await.clone();
+        let api_host = self.api_host.lock().await.clone();
+        AdriveUserGetDriveInfoRequest {
+            agent: agent.clone(),
+            api_host: api_host.clone(),
+            access_token: AccessTokenLoader {
+                agent,
+                api_host,
+                client_id: self.client_id.lock().await.clone(),
+                client_secret: self.client_secret.lock().await.clone(),
+                access_token_store: self.access_token_store.lock().await.clone(),
+            },
+        }
+    }
+
+    pub async fn adrive_open_file_list(&self) -> AdriveOpenFileListRequest {
+        let agent = self.agent.lock().await.clone();
+        let api_host = self.api_host.lock().await.clone();
+        AdriveOpenFileListRequest {
+            agent: agent.clone(),
+            api_host: api_host.clone(),
+            access_token: AccessTokenLoader {
+                agent,
+                api_host,
+                client_id: self.client_id.lock().await.clone(),
+                client_secret: self.client_secret.lock().await.clone(),
+                access_token_store: self.access_token_store.lock().await.clone(),
+            },
+            drive_id: "".to_string(),
+            limit: None,
+            marker: None,
+            order_by: None,
+            order_direction: None,
+            parent_file_id: "root".to_string(),
+            category: None,
+            file_type: None,
+            video_thumbnail_time: None,
+            video_thumbnail_width: None,
+            image_thumbnail_width: None,
+            fields: None,
+        }
+    }
+
     pub async fn client_oauth_parse_code(&self, code: &str) -> Result<AccessToken> {
         let token = self
-            .api_oauth_access_token()
+            .oauth_access_token()
             .await
             .code(code)
             .grant_type(GrantType::AuthorizationCode)
@@ -136,7 +178,7 @@ impl Client {
         refresh_token: &str,
     ) -> Result<AccessToken> {
         let token = self
-            .api_oauth_access_token()
+            .oauth_access_token()
             .await
             .refresh_token(refresh_token)
             .grant_type(GrantType::RefreshToken)

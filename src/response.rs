@@ -30,3 +30,13 @@ pub struct OauthUsersScopes {
 pub struct OauthUsersScope {
     pub scope: String,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserGetDriveInfo {
+    pub user_id: String,
+    pub name: String,
+    pub avatar: String,
+    pub default_drive_id: String,
+    pub resource_drive_id: Option<String>,
+    pub backup_drive_id: Option<String>,
+}

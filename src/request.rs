@@ -304,3 +304,76 @@ impl OauthUsersScopesRequest {
         response(resp).await
     }
 }
+
+pub struct AdriveUserGetDriveInfoRequest {
+    pub agent: Arc<reqwest::Client>,
+    pub api_host: Arc<String>,
+    pub access_token: AccessTokenLoader,
+}
+
+impl AdriveUserGetDriveInfoRequest {
+    pub fn agent(mut self, agent: Arc<reqwest::Client>) -> Self {
+        self.agent = agent;
+        self
+    }
+
+    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
+        self.api_host = Arc::new(api_host.into());
+        self
+    }
+
+    pub async fn request(&self) -> Result<AdriveUserGetDriveInfo> {
+        let token = self.access_token.load_access_token().await?;
+        let resp = self
+            .agent
+            .post(format!("{}/adrive/v1.0/user/getDriveInfo", self.api_host.as_str()).as_str())
+            .header("Authorization", format!("Bearer {}", token.access_token))
+            .send()
+            .await?;
+        response(resp).await
+    }
+}
+
+pub struct AdriveOpenFileListRequest {
+    pub agent: Arc<reqwest::Client>,
+    pub api_host: Arc<String>,
+    pub access_token: AccessTokenLoader,
+    pub drive_id: String,
+    pub limit: Option<i64>,
+    pub marker: Option<String>,
+    pub order_by: Option<String>,
+    pub order_direction: Option<String>,
+    pub parent_file_id: String,
+    pub category: Option<String>,
+    pub file_type: Option<String>,
+    pub video_thumbnail_time: Option<i64>,
+    pub video_thumbnail_width: Option<i64>,
+    pub image_thumbnail_width: Option<i64>,
+    pub fields: Option<String>,
+}
+
+/*
+名称	类型	是否必填	说明
+drive_id	string	必填	drive id
+limit 	integer 	选填	返回文件数量，默认 50，最大 100
+marker	string	选填	分页标记
+order_by	string	选填	created_at
+updated_at
+name
+size
+name_enhanced（对数字编号的文件友好，排序结果为 1、2、3...99 而不是 1、10、11...2、21...9、91...99）
+order_direction	string	选填	DESC ASC
+parent_file_id	string	必填	根目录为root
+category 	string	选填	分类，目前有枚举：video | doc | audio | zip | others | image
+可任意组合，按照逗号分割，例如 video,doc,audio
+image,doc
+type	string	选填	all | file | folder，
+默认所有类型
+type为folder时，category不做检查
+video_thumbnail_time	number	选填	生成的视频缩略图截帧时间，单位ms，默认120000ms
+video_thumbnail_width	number	选填	生成的视频缩略图宽度，默认480px
+image_thumbnail_width	number	选填	生成的图片缩略图宽度，默认480px
+fields	string	选填	当填 * 时，返回文件所有字段。或某些字段，逗号分隔： id_path,name_path
+
+
+ */

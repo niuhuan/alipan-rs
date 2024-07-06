@@ -45,7 +45,7 @@ async fn client() -> Client {
 async fn test_oauth_authorize() -> anyhow::Result<()> {
     let client = client().await;
     let url = client
-        .api_oauth_authorize()
+        .oauth_authorize()
         .await
         .redirect_uri("http://localhost:58443/oauth_authorize")
         .scope("user:base,file:all:read,file:all:write,album:shared:read")
@@ -76,7 +76,7 @@ async fn load_file(path: &str) -> anyhow::Result<String> {
 #[tokio::test]
 async fn test_oauth_users_info() -> anyhow::Result<()> {
     let client = client().await;
-    let users_info = client.api_oauth_users_info().await.request().await?;
+    let users_info = client.oauth_users_info().await.request().await?;
     println!("{:?}", users_info);
     Ok(())
 }
@@ -84,7 +84,15 @@ async fn test_oauth_users_info() -> anyhow::Result<()> {
 #[tokio::test]
 async fn test_oauth_users_scopes() -> anyhow::Result<()> {
     let client = client().await;
-    let users_scopes = client.api_oauth_users_scopes().await.request().await?;
+    let users_scopes = client.oauth_users_scopes().await.request().await?;
     println!("{:?}", users_scopes);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_user_get_drive_info() -> anyhow::Result<()> {
+    let client = client().await;
+    let drive_info = client.adrive_user_get_drive_info().await.request().await?;
+    println!("{:?}", drive_info);
     Ok(())
 }
