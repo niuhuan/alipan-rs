@@ -107,6 +107,14 @@ impl Client {
         }
     }
 
+    pub async fn adrive_user_get_space_info(&self) -> AdriveUserGetSpaceInfoRequest {
+        AdriveUserGetSpaceInfoRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
+        }
+    }
+
     pub async fn adrive_open_file_list(&self) -> AdriveOpenFileListRequest {
         AdriveOpenFileListRequest {
             agent: self.clone_agent().await,

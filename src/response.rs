@@ -45,6 +45,17 @@ pub struct AdriveUserGetDriveInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserGetSpaceInfo {
+    pub personal_space_info: AdriveUserSpaceInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserSpaceInfo {
+    pub used_size: i64,
+    pub total_size: i64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AdriveOpenFileList {
     pub items: Vec<AdriveOpenFile>,
     #[serde(deserialize_with = "blank_to_null")]

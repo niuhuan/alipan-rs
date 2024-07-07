@@ -103,6 +103,14 @@ async fn test_adrive_user_get_drive_info() -> anyhow::Result<()> {
 }
 
 #[tokio::test]
+async fn test_adrive_user_get_space_info() -> anyhow::Result<()> {
+    let client = client().await;
+    let space_info = client.adrive_user_get_space_info().await.request().await?;
+    println!("{:?}", space_info);
+    Ok(())
+}
+
+#[tokio::test]
 async fn test_adrive_open_file_list() -> anyhow::Result<()> {
     let client = client().await;
     let open_file_list = client
