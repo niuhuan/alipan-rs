@@ -1,7 +1,8 @@
 use super::response::*;
 use crate::access_token_store::{AccessToken, BoxedAccessTokenStore};
 use crate::common::GrantType;
-use crate::{AlipanError, Error, OauthAccessToken, Result};
+use crate::{AdriveOpenFileType, AlipanError, CheckNameMode, Error, OauthAccessToken, Result};
+use chrono::Local;
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -513,28 +514,38 @@ impl AdriveOpenFileListRequest {
     }
 }
 
-/*
-名称	类型	是否必填	说明
-drive_id	string	必填	drive id
-limit 	integer 	选填	返回文件数量，默认 50，最大 100
-marker	string	选填	分页标记
-order_by	string	选填	created_at
-updated_at
-name
-size
-name_enhanced（对数字编号的文件友好，排序结果为 1、2、3...99 而不是 1、10、11...2、21...9、91...99）
-order_direction	string	选填	DESC ASC
-parent_file_id	string	必填	根目录为root
-category 	string	选填	分类，目前有枚举：video | doc | audio | zip | others | image
-可任意组合，按照逗号分割，例如 video,doc,audio
-image,doc
-type	string	选填	all | file | folder，
-默认所有类型
-type为folder时，category不做检查
-video_thumbnail_time	number	选填	生成的视频缩略图截帧时间，单位ms，默认120000ms
-video_thumbnail_width	number	选填	生成的视频缩略图宽度，默认480px
-image_thumbnail_width	number	选填	生成的图片缩略图宽度，默认480px
-fields	string	选填	当填 * 时，返回文件所有字段。或某些字段，逗号分隔： id_path,name_path
+pub struct AdriveOpenFileCreateRequest {
+    pub agent: Arc<reqwest::Client>,
+    pub api_host: Arc<String>,
+    pub access_token: AccessTokenLoader,
+    pub drive_id: String,
+    pub parent_file_id: String,
+    pub name: String,
+    pub r#type: AdriveOpenFileType,
+    pub check_name_mode: CheckNameMode,
+    pub part_info_list: Option<Vec<AdriveOpenFilePartInfo>>,
+    pub streams_info: Option<Vec<AdriveOpenFileStreamInfo>>,
+    pub pre_hash: Option<String>,
+    pub size: i64,
+    pub content_hash: Option<String>,
+    pub content_hash_name: Option<String>,
+    pub proof_code: Option<String>,
+    pub proof_version: Option<String>,
+    pub local_created_at: Option<chrono::DateTime<Local>>,
+    pub local_modified_at: Option<chrono::DateTime<Local>>,
+}
 
+pub struct AdriveOpenFilePartInfo {
+    pub part_number: i64,
+}
 
- */
+pub struct AdriveOpenFileStreamInfo {
+    pub content_hash: String,
+    pub content_hash_name: String,
+    pub proof_version: String,
+    pub proof_code: String,
+    pub content_md5: String,
+    pub pre_hash: String,
+    pub size: i64,
+    pub part_info_list: Vec<AdriveOpenFilePartInfo>,
+}

@@ -72,6 +72,14 @@ enum_str!(GrantType {
 });
 
 enum_str! (AdriveOpenFileType {
+    None(""),
     File("file"),
     Folder("folder"),
+});
+
+enum_str!(CheckNameMode {
+    None(""),
+    AutoRename("auto_rename"),
+    Refuse("refuse"),
+    Ignore("ignore"),
 });

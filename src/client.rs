@@ -135,6 +135,31 @@ impl Client {
         }
     }
 
+    // /adrive/v1.0/openFile/create
+
+    pub async fn adrive_open_file_create(&self) -> AdriveOpenFileCreateRequest {
+        AdriveOpenFileCreateRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.access_token_loader().await,
+            drive_id: "".to_string(),
+            parent_file_id: "root".to_string(),
+            name: "".to_string(),
+            r#type: AdriveOpenFileType::File,
+            check_name_mode: CheckNameMode::None,
+            part_info_list: None,
+            streams_info: None,
+            pre_hash: None,
+            size: 0,
+            content_hash: None,
+            content_hash_name: None,
+            proof_code: None,
+            proof_version: None,
+            local_created_at: None,
+            local_modified_at: None,
+        }
+    }
+
     async fn access_token_loader(&self) -> AccessTokenLoader {
         AccessTokenLoader {
             agent: self.agent.lock().await.clone(),
