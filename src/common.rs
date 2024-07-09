@@ -82,7 +82,6 @@ enum_str! (AdriveOpenFileType {
 });
 
 enum_str!(CheckNameMode {
-    None(""),
     AutoRename("auto_rename"),
     Refuse("refuse"),
     Ignore("ignore"),

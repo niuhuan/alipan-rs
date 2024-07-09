@@ -224,3 +224,76 @@ fn sha1(bytes: &[u8]) -> String {
     let result = hasher.finalize();
     hex::encode(result)
 }
+
+#[tokio::test]
+async fn test_adrive_open_file_create_file2() -> anyhow::Result<()> {
+    let open_file_create = crate::tests::client()
+        .await
+        .adrive_open_file_create()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .parent_file_id("root".to_string())
+        .name("test.txt")
+        .r#type(AdriveOpenFileType::File)
+        .check_name_mode(CheckNameMode::Refuse)
+        .size(TEXT.len() as i64)
+        .request()
+        .await?;
+    println!("{:?}", open_file_create);
+    println!("{}", serde_json::to_string(&open_file_create)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_create_file3() -> anyhow::Result<()> {
+    let open_file_create = crate::tests::client()
+        .await
+        .adrive_open_file_create()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .parent_file_id("root".to_string())
+        .name("test.txt")
+        .r#type(AdriveOpenFileType::File)
+        .check_name_mode(CheckNameMode::Refuse)
+        .size(TEXT.len() as i64)
+        .content_hash_name("sha1")
+        .content_hash(sha1(TEXT.as_bytes()))
+        .request()
+        .await?;
+    println!("{:?}", open_file_create);
+    println!("{}", serde_json::to_string(&open_file_create)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_get_upload_url() -> anyhow::Result<()> {
+    let open_file_get_upload_url = crate::tests::client()
+        .await
+        .adrive_open_file_get_upload_url()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .upload_id("upload_id".to_string())
+        .part_info_list(vec![crate::AdriveOpenFilePartInfo { part_number: 1 }])
+        .request()
+        .await?;
+    println!("{:?}", open_file_get_upload_url);
+    println!("{}", serde_json::to_string(&open_file_get_upload_url)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_list_uploaded_parts() -> anyhow::Result<()> {
+    let open_file_list_uploaded_parts = crate::tests::client()
+        .await
+        .adrive_open_file_list_uploaded_parts()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .upload_id("upload_id".to_string())
+        .request()
+        .await?;
+    println!("{:?}", open_file_list_uploaded_parts);
+    println!("{}", serde_json::to_string(&open_file_list_uploaded_parts)?);
+    Ok(())
+}

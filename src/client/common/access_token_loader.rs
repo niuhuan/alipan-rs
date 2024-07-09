@@ -1,4 +1,4 @@
-use crate::adrive_api::OauthAccessToken;
+use crate::oauth_access_token::OauthAccessToken;
 use crate::{BoxedError, GrantType, OAuthClient};
 use async_trait::async_trait;
 use serde_derive::{Deserialize, Serialize};
