@@ -1,5 +1,5 @@
 use crate::access_token_store::{AccessToken, AccessTokenStore};
-use crate::{BoxedError, Client};
+use crate::{AdriveOpenFileType, BoxedError, CheckNameMode, Client};
 use async_trait::async_trait;
 
 #[derive(Debug)]
@@ -120,5 +120,30 @@ async fn test_adrive_open_file_list() -> anyhow::Result<()> {
         .request()
         .await?;
     println!("{:?}", open_file_list);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_create() -> anyhow::Result<()> {
+    let client = client().await;
+    let drive_id = drive_id().await?;
+    let parent_file_id = "root".to_string();
+    let name = "test_folder".to_string();
+    let r#type = AdriveOpenFileType::Folder;
+    let check_name_mode = CheckNameMode::Refuse;
+    let content_hash = "".to_string();
+    let open_file_create = client
+        .adrive_open_file_create()
+        .await
+        .drive_id(drive_id)
+        .parent_file_id(parent_file_id)
+        .name(name)
+        .r#type(r#type)
+        .check_name_mode(check_name_mode)
+        .content_hash(content_hash)
+        .request()
+        .await?;
+    println!("{:?}", open_file_create);
+    println!("{}", serde_json::to_string(&open_file_create)?);
     Ok(())
 }

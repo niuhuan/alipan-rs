@@ -63,10 +63,10 @@ impl AccessTokenLoader {
             api_host: self.api_host.clone(),
             client_id: self.client_id.clone(),
             client_secret: self.client_secret.clone(),
-            grant_type: GrantType::RefreshToken,
-            code: None,
-            refresh_token: Some(token.refresh_token),
-            code_verifier: None,
+            grant_type: GrantType::RefreshToken.into(),
+            code: None.into(),
+            refresh_token: token.refresh_token.into(),
+            code_verifier: None.into(),
         }
         .request()
         .await?;

@@ -3,7 +3,7 @@ use crate::request::*;
 use std::sync::Arc;
 
 use crate::access_token_store::{AccessToken, BoxedAccessTokenStore};
-use crate::types::*;
+use crate::result::*;
 use tokio::sync::Mutex;
 
 const DEFAULT_API_HOST: &str = "https://openapi.alipan.com";
@@ -76,10 +76,10 @@ impl Client {
             api_host: self.api_host.lock().await.clone(),
             client_id: self.client_id.lock().await.clone(),
             client_secret: self.client_secret.lock().await.clone(),
-            grant_type: GrantType::None,
-            code: None,
-            refresh_token: None,
-            code_verifier: None,
+            grant_type: None.into(),
+            code: None.into(),
+            refresh_token: None.into(),
+            code_verifier: None.into(),
         }
     }
 
@@ -121,17 +121,17 @@ impl Client {
             api_host: self.clone_api_host().await,
             access_token: self.access_token_loader().await,
             drive_id: "".to_string(),
-            limit: None,
-            marker: None,
-            order_by: None,
-            order_direction: None,
+            limit: None.into(),
+            marker: None.into(),
+            order_by: None.into(),
+            order_direction: None.into(),
             parent_file_id: "root".to_string(),
-            category: None,
-            file_type: None,
-            video_thumbnail_time: None,
-            video_thumbnail_width: None,
-            image_thumbnail_width: None,
-            fields: None,
+            category: None.into(),
+            r#type: None.into(),
+            video_thumbnail_time: None.into(),
+            video_thumbnail_width: None.into(),
+            image_thumbnail_width: None.into(),
+            fields: None.into(),
         }
     }
 
@@ -150,7 +150,7 @@ impl Client {
             part_info_list: None,
             streams_info: None,
             pre_hash: None,
-            size: 0,
+            size: None,
             content_hash: None,
             content_hash_name: None,
             proof_code: None,

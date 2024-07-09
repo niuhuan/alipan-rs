@@ -2,7 +2,7 @@ pub mod client;
 pub mod common;
 pub mod request;
 pub mod response;
-pub mod types;
+pub mod result;
 
 mod access_token_store;
 #[cfg(test)]
@@ -12,4 +12,4 @@ pub use client::*;
 pub use common::*;
 pub use request::*;
 pub use response::*;
-pub use types::*;
+pub use result::*;
