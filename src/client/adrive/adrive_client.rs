@@ -5,7 +5,8 @@ use crate::adrive::adrive_api::{
     AdriveUserGetSpaceInfoRequest,
 };
 use crate::adrive_api::{
-    AdriveOpenFileGetUploadUrlRequest, AdriveOpenFileListUploadedPartsRequest,
+    AdriveOpenFileCompleteRequest, AdriveOpenFileGetUploadUrlRequest,
+    AdriveOpenFileListUploadedPartsRequest,
 };
 use crate::client::common::access_token_loader::BoxedAccessTokenLoader;
 use crate::define::DEFAULT_API_HOST;
@@ -155,6 +156,19 @@ impl AdriveClient {
             file_id: None.into(),
             upload_id: None.into(),
             part_number_marker: None.into(),
+        }
+    }
+
+    // /adrive/v1.0/openFile/complete
+
+    pub async fn adrive_open_file_complete(&self) -> AdriveOpenFileCompleteRequest {
+        AdriveOpenFileCompleteRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            upload_id: None.into(),
         }
     }
 

@@ -1,3 +1,4 @@
+use crate::adrive_api::put_resource::PutResource;
 use crate::client::common::access_token_loader::AccessToken;
 use crate::{
     AdriveClient, AdriveOpenFileType, BoxedAccessTokenLoader, BoxedError, CheckNameMode, GrantType,
@@ -6,7 +7,6 @@ use crate::{
 use async_trait::async_trait;
 use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
-
 // 使用文件保管客户端信息，方便调试
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
@@ -295,5 +295,42 @@ async fn test_adrive_open_file_list_uploaded_parts() -> anyhow::Result<()> {
         .await?;
     println!("{:?}", open_file_list_uploaded_parts);
     println!("{}", serde_json::to_string(&open_file_list_uploaded_parts)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_upload_part() -> anyhow::Result<()> {
+    let (sender, body) = PutResource::channel_resource();
+    let put_resource = PutResource {
+        agent: Arc::new(reqwest::Client::new()),
+        url: "https://cn-beijing-data.aliyundrive.net/xxxxx".to_string(),
+        resource: body,
+    };
+    let (a, b) = tokio::join!(put_resource.put(), send(sender));
+    a.unwrap();
+    b.unwrap();
+    Ok(())
+}
+
+async fn send(
+    sender: tokio::sync::mpsc::Sender<Result<Vec<u8>, BoxedError>>,
+) -> anyhow::Result<()> {
+    sender.send(Ok(TEXT.as_bytes().to_vec())).await?;
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_complete() -> anyhow::Result<()> {
+    let open_file_complete = crate::tests::client()
+        .await
+        .adrive_open_file_complete()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .upload_id("upload_id".to_string())
+        .request()
+        .await?;
+    println!("{:?}", open_file_complete);
+    println!("{}", serde_json::to_string(&open_file_complete)?);
     Ok(())
 }

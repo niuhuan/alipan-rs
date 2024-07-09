@@ -96,6 +96,6 @@ pub struct AdriveOpenFileGetUploadUrl {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AdriveOpenFilePartInfoUpload {
     pub part_number: i64,
-    pub part_size: i64,
+    pub part_size: Option<i64>,
     pub upload_url: String,
 }

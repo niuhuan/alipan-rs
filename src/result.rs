@@ -55,6 +55,7 @@ pub enum ErrorInfo {
     SerdeJsonErrorPath(serde_path_to_error::Error<serde_json::Error>),
     UrlParseError(url::ParseError),
     ServerError(ServerError),
+    Io(std::io::Error),
     // todo: split into more specific error types
     Msg(String),
     Boxed(Box<dyn std::error::Error + Send + Sync>),
@@ -95,6 +96,18 @@ impl From<serde_path_to_error::Error<serde_json::Error>> for AlipanError {
 impl From<url::ParseError> for AlipanError {
     fn from(e: url::ParseError) -> Self {
         AlipanError::new(ErrorInfo::UrlParseError(e))
+    }
+}
+
+impl From<ServerError> for AlipanError {
+    fn from(e: ServerError) -> Self {
+        AlipanError::new(ErrorInfo::ServerError(e))
+    }
+}
+
+impl From<std::io::Error> for AlipanError {
+    fn from(e: std::io::Error) -> Self {
+        AlipanError::new(ErrorInfo::Io(e))
     }
 }
 
