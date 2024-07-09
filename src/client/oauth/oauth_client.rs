@@ -7,6 +7,7 @@ use crate::{
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
+#[derive(Debug)]
 pub struct OAuthClient {
     pub api_host: Mutex<Arc<String>>,
     pub agent: Mutex<Arc<reqwest::Client>>,

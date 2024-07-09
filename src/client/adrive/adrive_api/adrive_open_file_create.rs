@@ -1,40 +1,61 @@
 use crate::client::common::access_token_loader::AccessTokenLoader;
 use crate::{
     response, AdriveOpenFileCreate, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
-    AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode,
+    AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode, OptionParam,
 };
 use chrono::Local;
+use std::ops::Deref;
 use std::sync::Arc;
 
 pub struct AdriveOpenFileCreateRequest {
     pub agent: Arc<reqwest::Client>,
     pub api_host: Arc<String>,
     pub access_token: Arc<Box<dyn AccessTokenLoader>>,
-    pub drive_id: String,
-    pub parent_file_id: String,
-    pub name: String,
-    pub r#type: AdriveOpenFileType,
-    pub check_name_mode: CheckNameMode,
-    pub part_info_list: Option<Vec<AdriveOpenFilePartInfo>>,
-    pub streams_info: Option<Vec<AdriveOpenFileStreamInfo>>,
-    pub pre_hash: Option<String>,
-    pub size: Option<i64>,
-    pub content_hash: Option<String>,
-    pub content_hash_name: Option<String>,
-    pub proof_code: Option<String>,
-    pub proof_version: Option<String>,
-    pub local_created_at: Option<chrono::DateTime<Local>>,
-    pub local_modified_at: Option<chrono::DateTime<Local>>,
+    pub drive_id: OptionParam<String>,
+    pub parent_file_id: OptionParam<String>,
+    pub name: OptionParam<String>,
+    pub r#type: OptionParam<AdriveOpenFileType>,
+    pub check_name_mode: OptionParam<CheckNameMode>,
+    pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfo>>,
+    pub streams_info: OptionParam<Vec<AdriveOpenFileStreamInfo>>,
+    pub pre_hash: OptionParam<String>,
+    pub size: OptionParam<i64>,
+    pub content_hash: OptionParam<String>,
+    pub content_hash_name: OptionParam<String>,
+    pub proof_code: OptionParam<String>,
+    pub proof_version: OptionParam<String>,
+    pub local_created_at: OptionParam<chrono::DateTime<Local>>,
+    pub local_modified_at: OptionParam<chrono::DateTime<Local>>,
 }
 
 impl AdriveOpenFileCreateRequest {
     pub async fn request(&self) -> crate::Result<AdriveOpenFileCreate> {
         let params = AdriveOpenFileCreatePost {
-            drive_id: self.drive_id.clone(),
-            parent_file_id: self.parent_file_id.clone(),
-            name: self.name.clone(),
-            r#type: self.r#type.clone(),
-            check_name_mode: self.check_name_mode.clone(),
+            drive_id: if let Some(drive_id) = self.drive_id.deref() {
+                drive_id.clone()
+            } else {
+                return Err(crate::Error::msg("drive_id is required"));
+            },
+            parent_file_id: if let Some(parent_file_id) = self.parent_file_id.deref() {
+                parent_file_id.clone()
+            } else {
+                return Err(crate::Error::msg("parent_file_id is required"));
+            },
+            name: if let Some(name) = self.name.deref() {
+                name.clone()
+            } else {
+                return Err(crate::Error::msg("name is required"));
+            },
+            r#type: if let Some(r#type) = self.r#type.deref() {
+                r#type.clone()
+            } else {
+                return Err(crate::Error::msg("r#type is required"));
+            },
+            check_name_mode: if let Some(check_name_mode) = self.check_name_mode.deref() {
+                check_name_mode.clone()
+            } else {
+                return Err(crate::Error::msg("check_name_mode is required"));
+            },
             part_info_list: self.part_info_list.clone(),
             streams_info: self.streams_info.clone(),
             pre_hash: self.pre_hash.clone(),
@@ -69,78 +90,93 @@ impl AdriveOpenFileCreateRequest {
         self
     }
 
-    pub fn drive_id(mut self, drive_id: impl Into<String>) -> Self {
+    pub fn drive_id(mut self, drive_id: impl Into<OptionParam<String>>) -> Self {
         self.drive_id = drive_id.into();
         self
     }
 
-    pub fn parent_file_id(mut self, parent_file_id: impl Into<String>) -> Self {
+    pub fn parent_file_id(mut self, parent_file_id: impl Into<OptionParam<String>>) -> Self {
         self.parent_file_id = parent_file_id.into();
         self
     }
 
-    pub fn name(mut self, name: impl Into<String>) -> Self {
+    pub fn name(mut self, name: impl Into<OptionParam<String>>) -> Self {
         self.name = name.into();
         self
     }
 
-    pub fn r#type(mut self, r#type: AdriveOpenFileType) -> Self {
-        self.r#type = r#type;
+    pub fn r#type(mut self, r#type: impl Into<OptionParam<AdriveOpenFileType>>) -> Self {
+        self.r#type = r#type.into();
         self
     }
 
-    pub fn check_name_mode(mut self, check_name_mode: CheckNameMode) -> Self {
-        self.check_name_mode = check_name_mode;
+    pub fn check_name_mode(
+        mut self,
+        check_name_mode: impl Into<OptionParam<CheckNameMode>>,
+    ) -> Self {
+        self.check_name_mode = check_name_mode.into();
         self
     }
 
-    pub fn part_info_list(mut self, part_info_list: Vec<AdriveOpenFilePartInfo>) -> Self {
-        self.part_info_list = Some(part_info_list);
+    pub fn part_info_list(
+        mut self,
+        part_info_list: impl Into<OptionParam<Vec<AdriveOpenFilePartInfo>>>,
+    ) -> Self {
+        self.part_info_list = part_info_list.into();
         self
     }
 
-    pub fn streams_info(mut self, streams_info: Vec<AdriveOpenFileStreamInfo>) -> Self {
-        self.streams_info = Some(streams_info);
+    pub fn streams_info(
+        mut self,
+        streams_info: impl Into<OptionParam<Vec<AdriveOpenFileStreamInfo>>>,
+    ) -> Self {
+        self.streams_info = streams_info.into();
         self
     }
 
-    pub fn pre_hash(mut self, pre_hash: impl Into<String>) -> Self {
-        self.pre_hash = Some(pre_hash.into());
+    pub fn pre_hash(mut self, pre_hash: impl Into<OptionParam<String>>) -> Self {
+        self.pre_hash = pre_hash.into();
         self
     }
 
-    pub fn size(mut self, size: i64) -> Self {
-        self.size = Some(size);
+    pub fn size(mut self, size: impl Into<OptionParam<i64>>) -> Self {
+        self.size = size.into();
         self
     }
 
-    pub fn content_hash(mut self, content_hash: impl Into<String>) -> Self {
-        self.content_hash = Some(content_hash.into());
+    pub fn content_hash(mut self, content_hash: impl Into<OptionParam<String>>) -> Self {
+        self.content_hash = content_hash.into();
         self
     }
 
-    pub fn content_hash_name(mut self, content_hash_name: impl Into<String>) -> Self {
-        self.content_hash_name = Some(content_hash_name.into());
+    pub fn content_hash_name(mut self, content_hash_name: impl Into<OptionParam<String>>) -> Self {
+        self.content_hash_name = content_hash_name.into();
         self
     }
 
-    pub fn proof_code(mut self, proof_code: impl Into<String>) -> Self {
-        self.proof_code = Some(proof_code.into());
+    pub fn proof_code(mut self, proof_code: impl Into<OptionParam<String>>) -> Self {
+        self.proof_code = proof_code.into();
         self
     }
 
-    pub fn proof_version(mut self, proof_version: impl Into<String>) -> Self {
-        self.proof_version = Some(proof_version.into());
+    pub fn proof_version(mut self, proof_version: impl Into<OptionParam<String>>) -> Self {
+        self.proof_version = proof_version.into();
         self
     }
 
-    pub fn local_created_at(mut self, local_created_at: chrono::DateTime<Local>) -> Self {
-        self.local_created_at = Some(local_created_at);
+    pub fn local_created_at(
+        mut self,
+        local_created_at: impl Into<OptionParam<chrono::DateTime<Local>>>,
+    ) -> Self {
+        self.local_created_at = local_created_at.into();
         self
     }
 
-    pub fn local_modified_at(mut self, local_modified_at: chrono::DateTime<Local>) -> Self {
-        self.local_modified_at = Some(local_modified_at);
+    pub fn local_modified_at(
+        mut self,
+        local_modified_at: impl Into<OptionParam<chrono::DateTime<Local>>>,
+    ) -> Self {
+        self.local_modified_at = local_modified_at.into();
         self
     }
 }

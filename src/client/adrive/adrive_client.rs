@@ -1,4 +1,3 @@
-use crate::common::*;
 use std::sync::Arc;
 
 use crate::adrive::adrive_api::{
@@ -47,8 +46,11 @@ impl AdriveClient {
         self
     }
 
-    pub async fn set_access_token_store(self, access_token_store: BoxedAccessTokenLoader) -> Self {
-        *self.access_token_loader.lock().await = Arc::new(access_token_store);
+    pub async fn set_access_token_loader(
+        self,
+        access_token_loader: BoxedAccessTokenLoader,
+    ) -> Self {
+        *self.access_token_loader.lock().await = Arc::new(access_token_loader);
         self
     }
 
@@ -111,21 +113,21 @@ impl AdriveClient {
             agent: self.clone_agent().await,
             api_host: self.clone_api_host().await,
             access_token: self.clone_access_token_loader().await,
-            drive_id: "".to_string(),
-            parent_file_id: "root".to_string(),
-            name: "".to_string(),
-            r#type: AdriveOpenFileType::File,
-            check_name_mode: CheckNameMode::None,
-            part_info_list: None,
-            streams_info: None,
-            pre_hash: None,
-            size: None,
-            content_hash: None,
-            content_hash_name: None,
-            proof_code: None,
-            proof_version: None,
-            local_created_at: None,
-            local_modified_at: None,
+            drive_id: None.into(),
+            parent_file_id: None.into(),
+            name: None.into(),
+            r#type: None.into(),
+            check_name_mode: None.into(),
+            part_info_list: None.into(),
+            streams_info: None.into(),
+            pre_hash: None.into(),
+            size: None.into(),
+            content_hash: None.into(),
+            content_hash_name: None.into(),
+            proof_code: None.into(),
+            proof_version: None.into(),
+            local_created_at: None.into(),
+            local_modified_at: None.into(),
         }
     }
 

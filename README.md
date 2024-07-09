@@ -14,3 +14,7 @@ ALIPAN-RS
     - [x] 获取用户空间信息
 - [x] 文件
     - [x] 获取文件列表
+
+## 使用方法
+
+参考 [tests.ts](src/tests.rs)

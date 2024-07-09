@@ -1,6 +1,29 @@
-use crate::client::common::access_token_loader::{AccessToken, AccessTokenStore};
-use crate::{AdriveClient, AdriveOpenFileType, BoxedError, CheckNameMode};
+use crate::client::common::access_token_loader::AccessToken;
+use crate::{
+    AdriveClient, AdriveOpenFileType, BoxedAccessTokenLoader, BoxedError, CheckNameMode, GrantType,
+    OAuthClient, OAuthClientAccessTokenManager, OAuthClientAccessTokenStore,
+};
 use async_trait::async_trait;
+use serde_derive::{Deserialize, Serialize};
+use std::sync::Arc;
+
+// 使用文件保管客户端信息，方便调试
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ClientInfo {
+    pub client_id: String,
+    pub client_secret: String,
+}
+
+const CLIENT_INFO_JSON_PATH: &str = "target/client_info.json";
+
+pub fn load_client_info() -> anyhow::Result<ClientInfo> {
+    let content = std::fs::read_to_string(CLIENT_INFO_JSON_PATH)?;
+    let client_info: ClientInfo = serde_json::from_str(content.as_str())?;
+    Ok(client_info)
+}
+
+// 使用文件存储访问令牌
 
 #[derive(Debug)]
 pub struct FileAccessTokenStore(String);
@@ -12,8 +35,8 @@ impl FileAccessTokenStore {
 }
 
 #[async_trait]
-impl AccessTokenStore for FileAccessTokenStore {
-    async fn get_access_token(&self) -> std::result::Result<Option<AccessToken>, BoxedError> {
+impl OAuthClientAccessTokenStore for FileAccessTokenStore {
+    async fn get_access_token(&self) -> Result<Option<AccessToken>, BoxedError> {
         let content = tokio::fs::read_to_string(&self.0).await?;
         let token: AccessToken = serde_json::from_str(content.as_str())?;
         Ok(Some(token))
@@ -29,17 +52,36 @@ impl AccessTokenStore for FileAccessTokenStore {
     }
 }
 
-async fn client() -> AdriveClient {
-    AdriveClient::default()
-        .set_client_id(option_env!("client_id").unwrap_or(""))
+const ACCESS_TOKEN_JSON_PATH: &str = "target/access_token.json";
+
+async fn access_token_loader() -> BoxedAccessTokenLoader {
+    Box::new(OAuthClientAccessTokenManager {
+        oauth_client: Arc::new(oauth_client().await),
+        access_token_store: Arc::new(Box::new(FileAccessTokenStore::new(ACCESS_TOKEN_JSON_PATH))),
+    })
+}
+
+// 构建客户端
+
+async fn oauth_client() -> OAuthClient {
+    let client_info = load_client_info().expect("load client info error");
+    OAuthClient::default()
+        .set_client_id(client_info.client_id)
         .await
-        .set_client_secret(option_env!("client_secret").unwrap_or(""))
-        .await
-        .set_access_token_store(Box::new(FileAccessTokenStore::new(
-            "target/access_token.json",
-        )))
+        .set_client_secret(client_info.client_secret)
         .await
 }
+
+async fn client() -> AdriveClient {
+    let client_info = load_client_info().expect("load client info error");
+    AdriveClient::default()
+        .set_client_id(client_info.client_id)
+        .await
+        .set_access_token_loader(access_token_loader().await)
+        .await
+}
+
+// 测试内容
 
 async fn drive_id() -> anyhow::Result<String> {
     let content = tokio::fs::read_to_string("target/drive_id.txt").await?;
@@ -48,8 +90,8 @@ async fn drive_id() -> anyhow::Result<String> {
 
 #[tokio::test]
 async fn test_oauth_authorize() -> anyhow::Result<()> {
-    let client = client().await;
-    let url = client
+    let url = oauth_client()
+        .await
         .oauth_authorize()
         .await
         .redirect_uri("http://localhost:58443/oauth_authorize")
@@ -62,9 +104,13 @@ async fn test_oauth_authorize() -> anyhow::Result<()> {
 #[tokio::test]
 async fn test_oauth_access_token() -> anyhow::Result<()> {
     let code = load_file("target/code.txt").await?;
-    client()
+    oauth_client()
         .await
-        .client_oauth_parse_code(code.as_str())
+        .oauth_access_token()
+        .await
+        .grant_type(GrantType::AuthorizationCode)
+        .code(code)
+        .request()
         .await?;
     Ok(())
 }
@@ -124,7 +170,7 @@ async fn test_adrive_open_file_list() -> anyhow::Result<()> {
 }
 
 #[tokio::test]
-async fn test_adrive_open_file_create() -> anyhow::Result<()> {
+async fn test_adrive_open_file_create_folder() -> anyhow::Result<()> {
     let client = client().await;
     let drive_id = drive_id().await?;
     let parent_file_id = "root".to_string();
@@ -146,4 +192,35 @@ async fn test_adrive_open_file_create() -> anyhow::Result<()> {
     println!("{:?}", open_file_create);
     println!("{}", serde_json::to_string(&open_file_create)?);
     Ok(())
+}
+
+const TEXT: &str = "Hello, World!";
+
+#[tokio::test]
+async fn test_adrive_open_file_create_file() -> anyhow::Result<()> {
+    let open_file_create = crate::tests::client()
+        .await
+        .adrive_open_file_create()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .parent_file_id("root".to_string())
+        .name("test.txt")
+        .r#type(AdriveOpenFileType::File)
+        .check_name_mode(CheckNameMode::Refuse)
+        .size(TEXT.len() as i64)
+        .content_hash_name("sha1")
+        .content_hash(sha1(TEXT.as_bytes()))
+        .request()
+        .await?;
+    println!("{:?}", open_file_create);
+    println!("{}", serde_json::to_string(&open_file_create)?);
+    Ok(())
+}
+
+fn sha1(bytes: &[u8]) -> String {
+    use sha1::Digest;
+    let mut hasher = sha1::Sha1::new();
+    hasher.update(bytes);
+    let result = hasher.finalize();
+    hex::encode(result)
 }

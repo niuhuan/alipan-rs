@@ -77,7 +77,6 @@ enum_str!(GrantType {
 });
 
 enum_str! (AdriveOpenFileType {
-    None(""),
     File("file"),
     Folder("folder"),
 });
