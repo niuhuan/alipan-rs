@@ -1,14 +1,13 @@
-use crate::request::response;
-use crate::{AccessTokenLoader, AdriveUserGetSpaceInfo};
+use crate::{response, AccessTokenLoader, OauthUsersScopes};
 use std::sync::Arc;
 
-pub struct AdriveUserGetSpaceInfoRequest {
+pub struct OauthUsersScopesRequest {
     pub agent: Arc<reqwest::Client>,
     pub api_host: Arc<String>,
-    pub access_token: AccessTokenLoader,
+    pub access_token: Arc<Box<dyn AccessTokenLoader>>,
 }
 
-impl AdriveUserGetSpaceInfoRequest {
+impl OauthUsersScopesRequest {
     pub fn agent(mut self, agent: Arc<reqwest::Client>) -> Self {
         self.agent = agent;
         self
@@ -19,11 +18,11 @@ impl AdriveUserGetSpaceInfoRequest {
         self
     }
 
-    pub async fn request(&self) -> crate::Result<AdriveUserGetSpaceInfo> {
-        let token = self.access_token.load_access_token().await?;
+    pub async fn request(&self) -> crate::Result<OauthUsersScopes> {
+        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
-            .post(format!("{}/adrive/v1.0/user/getSpaceInfo", self.api_host.as_str()).as_str())
+            .get(format!("{}/oauth/users/scopes", self.api_host.as_str()).as_str())
             .header("Authorization", format!("Bearer {}", token.access_token))
             .send()
             .await?;

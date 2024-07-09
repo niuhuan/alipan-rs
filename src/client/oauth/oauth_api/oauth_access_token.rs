@@ -1,5 +1,5 @@
-use crate::request::response;
-use crate::{AlipanError, GrantType, OauthAccessToken, OptionParam};
+use crate::{response, AlipanError, GrantType, OptionParam};
+use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ops::Deref;
 use std::sync::Arc;
@@ -103,4 +103,16 @@ impl OauthAccessTokenRequest {
             .await?;
         response(resp).await
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthAccessToken {
+    /// token_type
+    pub token_type: String,
+    /// access_token
+    pub access_token: String,
+    /// refresh_token
+    pub refresh_token: String,
+    /// expires_in
+    pub expires_in: i64,
 }

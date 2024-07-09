@@ -1,11 +1,10 @@
-use crate::request::response;
-use crate::{AccessTokenLoader, OauthUsersInfo};
+use crate::{response, AccessTokenLoader, OauthUsersInfo};
 use std::sync::Arc;
 
 pub struct OauthUsersInfoRequest {
     pub agent: Arc<reqwest::Client>,
     pub api_host: Arc<String>,
-    pub access_token: AccessTokenLoader,
+    pub access_token: Arc<Box<dyn AccessTokenLoader>>,
 }
 
 impl OauthUsersInfoRequest {
@@ -20,7 +19,7 @@ impl OauthUsersInfoRequest {
     }
 
     pub async fn request(&self) -> crate::Result<OauthUsersInfo> {
-        let token = self.access_token.load_access_token().await?;
+        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .get(format!("{}/oauth/users/info", self.api_host.as_str()).as_str())

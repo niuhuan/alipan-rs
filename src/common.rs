@@ -1,3 +1,4 @@
+use crate::AlipanError;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
 use serde_derive::{Deserialize, Serialize};
@@ -158,6 +159,24 @@ where
     {
         Ok(OptionParam(Some(T::deserialize(deserializer)?)))
     }
+}
+
+pub async fn response<T: for<'de> serde::Deserialize<'de>>(
+    response: reqwest::Response,
+) -> crate::Result<T> {
+    let code = response.status();
+    let text = response.text().await?;
+    if !code.is_success() {
+        return Err(AlipanError::server(code, text.as_str()));
+    }
+    let data: T = from_str(&text)?;
+    Ok(data)
+}
+
+pub fn from_str<T: for<'de> serde::Deserialize<'de>>(json: &str) -> crate::Result<T> {
+    Ok(serde_path_to_error::deserialize(
+        &mut serde_json::Deserializer::from_str(json),
+    )?)
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

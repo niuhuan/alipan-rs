@@ -1,5 +1,6 @@
+use crate::client::common::access_token_loader::AccessTokenLoader;
 use crate::{
-    AccessTokenLoader, AdriveOpenFileCreate, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
+    response, AdriveOpenFileCreate, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
     AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode,
 };
 use chrono::Local;
@@ -8,7 +9,7 @@ use std::sync::Arc;
 pub struct AdriveOpenFileCreateRequest {
     pub agent: Arc<reqwest::Client>,
     pub api_host: Arc<String>,
-    pub access_token: AccessTokenLoader,
+    pub access_token: Arc<Box<dyn AccessTokenLoader>>,
     pub drive_id: String,
     pub parent_file_id: String,
     pub name: String,
@@ -45,8 +46,7 @@ impl AdriveOpenFileCreateRequest {
             local_created_at: self.local_created_at.clone(),
             local_modified_at: self.local_modified_at.clone(),
         };
-        println!("{}", serde_json::to_string(&params).unwrap());
-        let token = self.access_token.load_access_token().await?;
+        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/openFile/create", self.api_host.as_str()).as_str())
@@ -54,7 +54,7 @@ impl AdriveOpenFileCreateRequest {
             .json(&params)
             .send()
             .await?;
-        crate::request::response(resp).await
+        response(resp).await
     }
 }
 

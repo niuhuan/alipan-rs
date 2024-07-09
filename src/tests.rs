@@ -1,5 +1,5 @@
-use crate::access_token_store::{AccessToken, AccessTokenStore};
-use crate::{AdriveOpenFileType, BoxedError, CheckNameMode, Client};
+use crate::client::common::access_token_loader::{AccessToken, AccessTokenStore};
+use crate::{AdriveClient, AdriveOpenFileType, BoxedError, CheckNameMode};
 use async_trait::async_trait;
 
 #[derive(Debug)]
@@ -29,8 +29,8 @@ impl AccessTokenStore for FileAccessTokenStore {
     }
 }
 
-async fn client() -> Client {
-    Client::default()
+async fn client() -> AdriveClient {
+    AdriveClient::default()
         .set_client_id(option_env!("client_id").unwrap_or(""))
         .await
         .set_client_secret(option_env!("client_secret").unwrap_or(""))
