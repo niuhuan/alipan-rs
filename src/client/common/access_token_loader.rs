@@ -1,5 +1,5 @@
 use crate::oauth_access_token::OauthAccessToken;
-use crate::{BoxedError, GrantType, OAuthClient};
+use crate::{GrantType, OAuthClient};
 use async_trait::async_trait;
 use serde_derive::{Deserialize, Serialize};
 use std::fmt::Debug;
@@ -30,7 +30,7 @@ impl AccessToken {
 
 #[async_trait]
 pub trait AccessTokenLoader: Debug + Send + Sync {
-    async fn get_access_token(&self) -> Result<AccessToken, BoxedError>;
+    async fn get_access_token(&self) -> anyhow::Result<AccessToken>;
 }
 
 #[derive(Debug)]
@@ -38,8 +38,8 @@ pub struct UninitializedAccessTokenLoader;
 
 #[async_trait]
 impl AccessTokenLoader for UninitializedAccessTokenLoader {
-    async fn get_access_token(&self) -> Result<AccessToken, BoxedError> {
-        Err("uninitialized access token loader".into())
+    async fn get_access_token(&self) -> anyhow::Result<AccessToken> {
+        Err(anyhow::Error::msg("uninitialized access token loader"))
     }
 }
 
@@ -51,14 +51,14 @@ pub struct OAuthClientAccessTokenManager {
 
 #[async_trait]
 pub trait OAuthClientAccessTokenStore: Debug + Send + Sync {
-    async fn get_access_token(&self) -> Result<Option<AccessToken>, BoxedError>;
+    async fn get_access_token(&self) -> anyhow::Result<Option<AccessToken>>;
 
-    async fn set_access_token(&self, access_token: AccessToken) -> Result<(), BoxedError>;
+    async fn set_access_token(&self, access_token: AccessToken) -> anyhow::Result<()>;
 }
 
 #[async_trait]
 impl AccessTokenLoader for OAuthClientAccessTokenManager {
-    async fn get_access_token(&self) -> Result<AccessToken, BoxedError> {
+    async fn get_access_token(&self) -> anyhow::Result<AccessToken> {
         let token = self.access_token_store.get_access_token().await?;
         let token = match token {
             Some(token) => {
@@ -68,7 +68,7 @@ impl AccessTokenLoader for OAuthClientAccessTokenManager {
                 }
                 token
             }
-            None => return Err("no access token".into()),
+            None => return Err(anyhow::Error::msg("no access token")),
         };
         let token = self
             .oauth_client

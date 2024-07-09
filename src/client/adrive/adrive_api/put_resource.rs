@@ -1,4 +1,3 @@
-use crate::BoxedError;
 use reqwest::Body;
 use std::sync::Arc;
 use tokio::sync::mpsc::Sender;
@@ -30,8 +29,8 @@ impl PutResource {
         Ok(Body::from(file))
     }
 
-    pub fn channel_resource() -> (Sender<Result<Vec<u8>, BoxedError>>, Body) {
-        let (sender, receiver) = tokio::sync::mpsc::channel::<Result<Vec<u8>, BoxedError>>(1);
+    pub fn channel_resource() -> (Sender<anyhow::Result<Vec<u8>>>, Body) {
+        let (sender, receiver) = tokio::sync::mpsc::channel::<anyhow::Result<Vec<u8>>>(16);
         let body = Body::wrap_stream(tokio_stream::wrappers::ReceiverStream::new(receiver));
         (sender, body)
     }

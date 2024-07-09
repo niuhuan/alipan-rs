@@ -6,7 +6,6 @@ use std::fmt::{Debug, Display, Formatter};
 
 pub type Error = AlipanError;
 pub type Result<T> = std::result::Result<T, Error>;
-pub type BoxedError = Box<dyn std::error::Error + Send + Sync>;
 
 #[derive(Debug)]
 pub struct AlipanError {
@@ -58,7 +57,7 @@ pub enum ErrorInfo {
     Io(std::io::Error),
     // todo: split into more specific error types
     Msg(String),
-    Boxed(Box<dyn std::error::Error + Send + Sync>),
+    Anyhow(anyhow::Error),
 }
 
 impl Display for ErrorInfo {
@@ -111,8 +110,8 @@ impl From<std::io::Error> for AlipanError {
     }
 }
 
-impl From<BoxedError> for AlipanError {
-    fn from(e: BoxedError) -> Self {
-        AlipanError::new(ErrorInfo::Boxed(e))
+impl From<anyhow::Error> for AlipanError {
+    fn from(e: anyhow::Error) -> Self {
+        AlipanError::new(ErrorInfo::Anyhow(e))
     }
 }

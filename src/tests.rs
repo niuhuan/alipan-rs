@@ -1,7 +1,7 @@
 use crate::adrive_api::put_resource::PutResource;
 use crate::client::common::access_token_loader::AccessToken;
 use crate::{
-    AdriveClient, AdriveOpenFileType, BoxedAccessTokenLoader, BoxedError, CheckNameMode, GrantType,
+    AdriveClient, AdriveOpenFileType, BoxedAccessTokenLoader, CheckNameMode, GrantType,
     OAuthClient, OAuthClientAccessTokenManager, OAuthClientAccessTokenStore,
 };
 use async_trait::async_trait;
@@ -36,16 +36,13 @@ impl FileAccessTokenStore {
 
 #[async_trait]
 impl OAuthClientAccessTokenStore for FileAccessTokenStore {
-    async fn get_access_token(&self) -> Result<Option<AccessToken>, BoxedError> {
+    async fn get_access_token(&self) -> anyhow::Result<Option<AccessToken>> {
         let content = tokio::fs::read_to_string(&self.0).await?;
         let token: AccessToken = serde_json::from_str(content.as_str())?;
         Ok(Some(token))
     }
 
-    async fn set_access_token(
-        &self,
-        access_token: AccessToken,
-    ) -> std::result::Result<(), BoxedError> {
+    async fn set_access_token(&self, access_token: AccessToken) -> anyhow::Result<()> {
         let content = serde_json::to_string(&access_token)?;
         tokio::fs::write(&self.0, content).await?;
         Ok(())
@@ -312,9 +309,7 @@ async fn test_adrive_open_file_upload_part() -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn send(
-    sender: tokio::sync::mpsc::Sender<Result<Vec<u8>, BoxedError>>,
-) -> anyhow::Result<()> {
+async fn send(sender: tokio::sync::mpsc::Sender<anyhow::Result<Vec<u8>>>) -> anyhow::Result<()> {
     sender.send(Ok(TEXT.as_bytes().to_vec())).await?;
     Ok(())
 }
