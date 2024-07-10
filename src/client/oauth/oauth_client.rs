@@ -51,4 +51,12 @@ impl OAuthClient {
     pub(crate) async fn clone_api_host(&self) -> Arc<String> {
         self.api_host.lock().await.clone()
     }
+
+    pub(crate) async fn clone_client_id(&self) -> Arc<String> {
+        self.client_id.lock().await.clone()
+    }
+
+    pub(crate) async fn clone_client_secret(&self) -> Arc<String> {
+        self.client_secret.lock().await.clone()
+    }
 }

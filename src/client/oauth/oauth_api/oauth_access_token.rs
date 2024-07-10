@@ -7,10 +7,10 @@ use std::sync::Arc;
 impl OAuthClient {
     pub async fn oauth_access_token(&self) -> OauthAccessTokenRequest {
         OauthAccessTokenRequest {
-            agent: self.agent.lock().await.clone(),
-            api_host: self.api_host.lock().await.clone(),
-            client_id: self.client_id.lock().await.clone(),
-            client_secret: self.client_secret.lock().await.clone(),
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            client_id: self.clone_client_id().await,
+            client_secret: self.clone_client_secret().await,
             grant_type: None.into(),
             code: None.into(),
             refresh_token: None.into(),

@@ -1,19 +1,5 @@
-use crate::{
-    response, AccessTokenLoader, AdriveClient, LoadAccessToken, OAuthClient, OauthUsersScopes,
-};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OauthUsersScopes};
 use std::sync::Arc;
-
-impl OAuthClient {
-    pub async fn oauth_users_scopes(&self) -> OauthUsersScopesRequest {
-        OauthUsersScopesRequest {
-            agent: self.clone_agent().await,
-            api_host: self.clone_api_host().await,
-            access_token: Arc::new(Box::new(
-                crate::client::common::access_token_loader::UninitializedAccessTokenLoader {},
-            )),
-        }
-    }
-}
 
 impl AdriveClient {
     pub async fn oauth_users_scopes(&self) -> OauthUsersScopesRequest {

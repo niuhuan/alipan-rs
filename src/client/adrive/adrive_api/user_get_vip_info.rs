@@ -1,19 +1,7 @@
-use crate::{
-    AccessTokenLoader, AdriveClient, LoadAccessToken, OAuthClient, UninitializedAccessTokenLoader,
-};
+use crate::{AccessTokenLoader, AdriveClient, LoadAccessToken};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
-
-impl OAuthClient {
-    pub async fn user_get_vip_info(&self) -> UserGetVipInfoRequest {
-        UserGetVipInfoRequest {
-            agent: self.clone_agent().await,
-            api_host: self.clone_api_host().await,
-            access_token: Arc::new(Box::new(UninitializedAccessTokenLoader {})),
-        }
-    }
-}
 
 impl AdriveClient {
     pub async fn user_get_vip_info(&self) -> UserGetVipInfoRequest {

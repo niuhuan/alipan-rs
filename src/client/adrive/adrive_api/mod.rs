@@ -14,7 +14,10 @@ pub mod adrive_open_file_recyclebin_trash;
 pub mod adrive_open_file_update;
 pub mod adrive_user_get_drive_info;
 pub mod adrive_user_get_space_info;
+pub mod oauth_users_info;
+pub mod oauth_users_scopes;
 pub mod put_resource;
+pub mod user_get_vip_info;
 
 pub use adrive_open_file_async_task_get::*;
 pub use adrive_open_file_complete::*;
@@ -28,4 +31,7 @@ pub use adrive_open_file_move::*;
 pub use adrive_open_file_update::*;
 pub use adrive_user_get_drive_info::*;
 pub use adrive_user_get_space_info::*;
+pub use oauth_users_info::*;
+pub use oauth_users_scopes::*;
 pub use put_resource::*;
+pub use user_get_vip_info::*;
