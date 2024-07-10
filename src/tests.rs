@@ -214,11 +214,11 @@ async fn test_adrive_open_file_batch_get() -> anyhow::Result<()> {
         .file_list(vec![
             AdriveOpenFileBatchGetRequestFileList {
                 drive_id: drive_id().await?,
-                file_id: "668109d097d307b7e040443e9e20659deb6784d5".to_string(),
+                file_id: "file_id".to_string(),
             },
             AdriveOpenFileBatchGetRequestFileList {
                 drive_id: drive_id().await?,
-                file_id: "668cce5e7c6d6e8c7d5447a9b2903cd7797522be".to_string(),
+                file_id: "file_id".to_string(),
             },
         ])
         .request()

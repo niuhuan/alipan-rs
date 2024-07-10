@@ -105,9 +105,21 @@ impl AdriveOpenFileListUploadedPartsRequest {
 
 #[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileListUploadedParts {
+    #[serde(default)]
     pub drive_id: String,
     pub upload_id: String,
+    #[serde(rename = "parallelUpload")]
     pub parallel_upload: bool,
     pub uploaded_parts: Vec<Value>,
     pub next_part_number_marker: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+pub struct UploadedParts {
+    pub content_type: String,
+    pub etag: Option<String>,
+    pub part_number: i64,
+    pub part_size: i64,
+    pub upload_form_info: Option<Value>,
+    pub upload_url: String,
 }

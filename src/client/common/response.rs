@@ -1,5 +1,4 @@
 use crate::AdriveOpenFileType;
-use serde::Deserialize;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -39,6 +38,7 @@ where
     D: serde::Deserializer<'de>,
     T: Default + serde::Deserialize<'de>,
 {
+    use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
     Ok(opt.unwrap_or_default())
 }
@@ -47,6 +47,7 @@ fn blank_to_null<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
 where
     D: serde::Deserializer<'de>,
 {
+    use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
     Ok(opt
         .map(|s: String| if s.is_empty() { None } else { Some(s) })
