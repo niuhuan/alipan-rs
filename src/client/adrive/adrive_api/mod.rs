@@ -1,6 +1,7 @@
 pub mod adrive_open_file_complete;
 pub mod adrive_open_file_copy;
 pub mod adrive_open_file_create;
+pub mod adrive_open_file_get;
 pub mod adrive_open_file_get_upload_url;
 pub mod adrive_open_file_list;
 pub mod adrive_open_file_list_uploaded_parts;
@@ -13,6 +14,7 @@ pub mod put_resource;
 pub use adrive_open_file_complete::*;
 pub use adrive_open_file_copy::*;
 pub use adrive_open_file_create::*;
+pub use adrive_open_file_get::*;
 pub use adrive_open_file_get_upload_url::*;
 pub use adrive_open_file_list::*;
 pub use adrive_open_file_list_uploaded_parts::*;
