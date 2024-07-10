@@ -5,8 +5,8 @@ use crate::adrive::adrive_api::{
     AdriveUserGetSpaceInfoRequest,
 };
 use crate::adrive_api::{
-    AdriveOpenFileCompleteRequest, AdriveOpenFileGetUploadUrlRequest,
-    AdriveOpenFileListUploadedPartsRequest, AdriveOpenFileUpdateRequest,
+    AdriveOpenFileCompleteRequest, AdriveOpenFileCopyRequest, AdriveOpenFileGetUploadUrlRequest,
+    AdriveOpenFileListUploadedPartsRequest, AdriveOpenFileMoveRequest, AdriveOpenFileUpdateRequest,
 };
 use crate::client::common::access_token_loader::BoxedAccessTokenLoader;
 use crate::define::DEFAULT_API_HOST;
@@ -159,8 +159,6 @@ impl AdriveClient {
         }
     }
 
-    // /adrive/v1.0/openFile/complete
-
     pub async fn adrive_open_file_complete(&self) -> AdriveOpenFileCompleteRequest {
         AdriveOpenFileCompleteRequest {
             agent: self.clone_agent().await,
@@ -182,6 +180,32 @@ impl AdriveClient {
             name: None.into(),
             check_name_mode: None.into(),
             starred: None.into(),
+        }
+    }
+
+    pub async fn adrive_open_file_move(&self) -> AdriveOpenFileMoveRequest {
+        AdriveOpenFileMoveRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            to_parent_file_id: None.into(),
+            check_name_mode: None.into(),
+            new_name: None.into(),
+        }
+    }
+
+    pub async fn adrive_open_file_copy(&self) -> AdriveOpenFileCopyRequest {
+        AdriveOpenFileCopyRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            to_drive_id: None.into(),
+            to_parent_file_id: None.into(),
+            auto_rename: None.into(),
         }
     }
 

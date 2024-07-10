@@ -347,3 +347,39 @@ async fn test_adrive_open_file_update() -> anyhow::Result<()> {
     println!("{}", serde_json::to_string(&open_file_update)?);
     Ok(())
 }
+
+#[tokio::test]
+async fn test_adrive_open_file_move() -> anyhow::Result<()> {
+    let open_file_move = crate::tests::client()
+        .await
+        .adrive_open_file_move()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .to_parent_file_id("parent_file_id".to_string())
+        .check_name_mode(CheckNameMode::Refuse)
+        .new_name("new_name".to_string())
+        .request()
+        .await?;
+    println!("{:?}", open_file_move);
+    println!("{}", serde_json::to_string(&open_file_move)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_copy() -> anyhow::Result<()> {
+    let open_file_copy = crate::tests::client()
+        .await
+        .adrive_open_file_copy()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .to_drive_id("to_drive_id".to_string())
+        .to_parent_file_id("to_parent_file_id".to_string())
+        .auto_rename(true)
+        .request()
+        .await?;
+    println!("{:?}", open_file_copy);
+    println!("{}", serde_json::to_string(&open_file_copy)?);
+    Ok(())
+}
