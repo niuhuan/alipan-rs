@@ -88,9 +88,7 @@ impl OauthAccessTokenRequest {
                     if let Some(code) = &self.code.deref() {
                         form.insert("code", code.as_str());
                     } else {
-                        return Err(AlipanError::msg(
-                            "code is required for authorization_code grant_type",
-                        ));
+                        return Err(AlipanError::require_param_missing("code"));
                     }
                     if let Some(code_verifier) = &self.code_verifier.deref() {
                         form.insert("code_verifier", code_verifier.as_str());
@@ -100,15 +98,13 @@ impl OauthAccessTokenRequest {
                     if let Some(refresh_token) = &self.refresh_token.deref() {
                         form.insert("refresh_token", refresh_token.as_str());
                     } else {
-                        return Err(AlipanError::msg(
-                            "refresh_token is required for refresh_token grant_type",
-                        ));
+                        return Err(AlipanError::require_param_missing("refresh_token"));
                     }
                 }
             }
             form.insert("grant_type", self.grant_type.unwrap().as_str());
         } else {
-            return Err(AlipanError::msg("grant_type is required"));
+            return Err(AlipanError::require_param_missing("grant_type"));
         }
         let resp = self
             .agent

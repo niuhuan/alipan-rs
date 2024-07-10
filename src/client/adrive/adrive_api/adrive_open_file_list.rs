@@ -144,10 +144,10 @@ impl AdriveOpenFileListRequest {
 
     pub async fn request(&self) -> crate::Result<AdriveOpenFileList> {
         if self.drive_id.is_empty() {
-            return Err(Error::msg("drive_id is required"));
+            return Err(Error::require_param_missing("drive_id"));
         }
         if self.parent_file_id.is_empty() {
-            return Err(Error::msg("parent_file_id is required"));
+            return Err(Error::require_param_missing("parent_file_id"));
         }
         let form = AdriveOpenFileListRequestPost {
             drive_id: self.drive_id.clone(),

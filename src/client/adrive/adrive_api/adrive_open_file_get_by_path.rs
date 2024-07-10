@@ -77,12 +77,12 @@ impl AdriveOpenFileGetByPathRequest {
                 drive_id: if let Some(drive_id) = &self.drive_id.deref() {
                     drive_id.to_owned()
                 } else {
-                    return Err(Error::msg("drive_id is required"));
+                    return Err(Error::require_param_missing("drive_id"));
                 },
                 file_path: if let Some(file_path) = &self.file_path.deref() {
                     file_path.to_owned()
                 } else {
-                    return Err(Error::msg("file_path is required"));
+                    return Err(Error::require_param_missing("file_path"));
                 },
             })
             .send()

@@ -101,17 +101,17 @@ impl AdriveOpenFileMoveRequest {
                 drive_id: if let Some(drive_id) = self.drive_id.deref() {
                     drive_id.deref().to_string()
                 } else {
-                    return Err(crate::Error::msg("drive_id"));
+                    return Err(crate::Error::require_param_missing("drive_id"));
                 },
                 file_id: if let Some(file_id) = self.file_id.deref() {
                     file_id.deref().to_string()
                 } else {
-                    return Err(crate::Error::msg("file_id"));
+                    return Err(crate::Error::require_param_missing("file_id"));
                 },
                 to_parent_file_id: if let Some(to_parent_file_id) = self.to_parent_file_id.deref() {
                     to_parent_file_id.deref().to_string()
                 } else {
-                    return Err(crate::Error::msg("to_parent_file_id"));
+                    return Err(crate::Error::require_param_missing("to_parent_file_id"));
                 },
                 check_name_mode: self.check_name_mode.clone(),
                 new_name: self.new_name.clone(),

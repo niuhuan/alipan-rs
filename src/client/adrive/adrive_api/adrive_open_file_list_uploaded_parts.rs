@@ -86,12 +86,12 @@ impl AdriveOpenFileListUploadedPartsRequest {
                 drive_id: if let Some(v) = &self.drive_id.deref() {
                     Some(v.clone())
                 } else {
-                    return Err(crate::Error::msg("drive_id is required"));
+                    return Err(crate::Error::require_param_missing("drive_id"));
                 },
                 file_id: if let Some(v) = &self.file_id.deref() {
                     Some(v.clone())
                 } else {
-                    return Err(crate::Error::msg("file_id is required"));
+                    return Err(crate::Error::require_param_missing("file_id"));
                 },
                 upload_id: self.upload_id.clone().into(),
                 part_number_marker: self.part_number_marker.clone(),

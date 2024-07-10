@@ -60,27 +60,27 @@ impl AdriveOpenFileCreateRequest {
             drive_id: if let Some(drive_id) = self.drive_id.deref() {
                 drive_id.clone()
             } else {
-                return Err(crate::Error::msg("drive_id is required"));
+                return Err(crate::Error::require_param_missing("drive_id"));
             },
             parent_file_id: if let Some(parent_file_id) = self.parent_file_id.deref() {
                 parent_file_id.clone()
             } else {
-                return Err(crate::Error::msg("parent_file_id is required"));
+                return Err(crate::Error::require_param_missing("parent_file_id"));
             },
             name: if let Some(name) = self.name.deref() {
                 name.clone()
             } else {
-                return Err(crate::Error::msg("name is required"));
+                return Err(crate::Error::require_param_missing("name"));
             },
             r#type: if let Some(r#type) = self.r#type.deref() {
                 r#type.clone()
             } else {
-                return Err(crate::Error::msg("r#type is required"));
+                return Err(crate::Error::require_param_missing("r#type"));
             },
             check_name_mode: if let Some(check_name_mode) = self.check_name_mode.deref() {
                 check_name_mode.clone()
             } else {
-                return Err(crate::Error::msg("check_name_mode is required"));
+                return Err(crate::Error::require_param_missing("check_name_mode"));
             },
             part_info_list: self.part_info_list.clone(),
             streams_info: self.streams_info.clone(),

@@ -79,12 +79,12 @@ impl AdriveOpenFileGetDownloadUrlRequest {
                 drive_id: if let Some(drive_id) = self.drive_id.deref() {
                     drive_id.clone()
                 } else {
-                    return Err(crate::Error::msg("drive_id"));
+                    return Err(crate::Error::require_param_missing("drive_id"));
                 },
                 file_id: if let Some(file_id) = self.file_id.deref() {
                     file_id.clone()
                 } else {
-                    return Err(crate::Error::msg("file_id"));
+                    return Err(crate::Error::require_param_missing("file_id"));
                 },
                 expire_sec: self.expire_sec.to_owned(),
             })

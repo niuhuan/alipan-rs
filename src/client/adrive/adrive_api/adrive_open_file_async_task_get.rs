@@ -60,7 +60,7 @@ impl AdriveOpenFileAsyncTaskGetRequest {
             async_task_id: if let Some(v) = self.async_task_id.as_ref() {
                 v.clone()
             } else {
-                return Err(crate::Error::msg("async_task_id".to_string()));
+                return Err(crate::Error::require_param_missing("async_task_id"));
             },
         };
         let resp = self

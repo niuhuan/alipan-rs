@@ -68,12 +68,12 @@ impl AdriveOpenFileRecyclebinTrashRequest {
                 drive_id: if let Some(drive_id) = self.drive_id.as_ref() {
                     drive_id.to_string()
                 } else {
-                    return Err(crate::Error::msg("drive_id is required"));
+                    return Err(crate::Error::require_param_missing("drive_id"));
                 },
                 file_id: if let Some(file_id) = self.file_id.as_ref() {
                     file_id.to_string()
                 } else {
-                    return Err(crate::Error::msg("file_id is required"));
+                    return Err(crate::Error::require_param_missing("file_id"));
                 },
             })
             .send()

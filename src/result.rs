@@ -25,6 +25,11 @@ impl AlipanError {
     pub fn msg(msg: impl Into<String>) -> Self {
         AlipanError::new(ErrorInfo::Msg(msg.into()))
     }
+
+    pub fn require_param_missing(param: impl Into<String>) -> Self {
+        AlipanError::new(ErrorInfo::RequireParamMissing(param.into()))
+    }
+
     pub fn server(code: StatusCode, content: &str) -> Self {
         let decoded: serde_json::Result<ServerError> = serde_json::from_str(content);
         if let Ok(server_error) = decoded {
@@ -57,6 +62,7 @@ pub enum ErrorInfo {
     Io(std::io::Error),
     // todo: split into more specific error types
     Msg(String),
+    RequireParamMissing(String),
     Anyhow(anyhow::Error),
 }
 

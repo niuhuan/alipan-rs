@@ -78,13 +78,13 @@ impl OauthAuthorizeUrl {
 
     pub fn build(&self) -> crate::Result<String> {
         if self.client_id.is_empty() {
-            return Err(Error::msg("client_id is required"));
+            return Err(Error::require_param_missing("client_id"));
         }
         if self.redirect_uri.is_empty() {
-            return Err(Error::msg("redirect_uri is required"));
+            return Err(Error::require_param_missing("redirect_uri"));
         }
         if self.scope.is_empty() {
-            return Err(Error::msg("scope is required"));
+            return Err(Error::require_param_missing("scope"));
         }
         let mut url = url::Url::parse(self.api_host.as_str())?;
         url.set_path("/oauth/authorize");

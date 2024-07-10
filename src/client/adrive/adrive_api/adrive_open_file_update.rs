@@ -100,12 +100,12 @@ impl AdriveOpenFileUpdateRequest {
                 drive_id: if let Some(ref v) = self.drive_id.deref() {
                     v.clone()
                 } else {
-                    return Err(crate::Error::msg("drive_id"));
+                    return Err(crate::Error::require_param_missing("drive_id"));
                 },
                 file_id: if let Some(ref v) = self.file_id.deref() {
                     v.clone()
                 } else {
-                    return Err(crate::Error::msg("file_id"));
+                    return Err(crate::Error::require_param_missing("file_id"));
                 },
                 name: self.name.clone(),
                 check_name_mode: self.check_name_mode.clone(),

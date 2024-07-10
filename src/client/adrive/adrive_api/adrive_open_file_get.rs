@@ -106,12 +106,12 @@ impl AdriveOpenFileGetRequest {
             drive_id: if let Some(drive_id) = self.drive_id.deref() {
                 drive_id.clone()
             } else {
-                return Err(Error::msg("drive_id"));
+                return Err(Error::require_param_missing("drive_id"));
             },
             file_id: if let Some(file_id) = self.file_id.deref() {
                 file_id.clone()
             } else {
-                return Err(Error::msg("file_id"));
+                return Err(Error::require_param_missing("file_id"));
             },
             video_thumbnail_time: self.video_thumbnail_time.deref().clone(),
             video_thumbnail_width: self.video_thumbnail_width.deref().clone(),

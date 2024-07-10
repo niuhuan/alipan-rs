@@ -69,12 +69,12 @@ impl AdriveOpenFileDeleteRequest {
                 drive_id: if let Some(drive_id) = self.drive_id.deref() {
                     drive_id.clone()
                 } else {
-                    return Err(crate::Error::msg("drive_id is required".to_owned()));
+                    return Err(crate::Error::require_param_missing("drive_id".to_owned()));
                 },
                 file_id: if let Some(file_id) = self.file_id.deref() {
                     file_id.clone()
                 } else {
-                    return Err(crate::Error::msg("file_id is required".to_owned()));
+                    return Err(crate::Error::require_param_missing("file_id".to_owned()));
                 },
             })
             .send()
