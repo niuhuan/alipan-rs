@@ -426,3 +426,33 @@ async fn test_adrive_open_file_copy() -> anyhow::Result<()> {
     println!("{}", serde_json::to_string(&open_file_copy)?);
     Ok(())
 }
+
+#[tokio::test]
+async fn test_adrive_open_file_recyclebin_trash() -> anyhow::Result<()> {
+    let open_file_trash = crate::tests::client()
+        .await
+        .adrive_open_file_recyclebin_trash()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .request()
+        .await?;
+    println!("{:?}", open_file_trash);
+    println!("{}", serde_json::to_string(&open_file_trash)?);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_delete() -> anyhow::Result<()> {
+    let client = client().await;
+    let open_file_restore = client
+        .adrive_open_file_delete()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .request()
+        .await?;
+    println!("{:?}", open_file_restore);
+    println!("{}", serde_json::to_string(&open_file_restore)?);
+    Ok(())
+}
