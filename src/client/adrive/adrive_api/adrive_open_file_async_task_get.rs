@@ -24,7 +24,7 @@ pub struct AdriveOpenFileAsyncTaskGetRequest {
     pub async_task_id: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileAsyncTaskGetPost {
     pub async_task_id: String,
 }
@@ -79,7 +79,7 @@ impl AdriveOpenFileAsyncTaskGetRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveOpenFileAsyncTaskGet {
     pub state: AdriveAsyncTaskState,
     pub async_task_id: String,

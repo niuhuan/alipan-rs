@@ -1,6 +1,5 @@
 use crate::AlipanError;
 use chrono::Local;
-use serde::{Deserialize, Serialize};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::{Deref, DerefMut};
 
@@ -138,9 +137,9 @@ impl From<&str> for OptionParam<String> {
     }
 }
 
-impl<T> Serialize for OptionParam<T>
+impl<T> ::serde::Serialize for OptionParam<T>
 where
-    T: Serialize,
+    T: ::serde::Serialize,
 {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -153,9 +152,9 @@ where
     }
 }
 
-impl<'de, T> Deserialize<'de> for OptionParam<T>
+impl<'de, T> ::serde::Deserialize<'de> for OptionParam<T>
 where
-    T: Deserialize<'de>,
+    T: ::serde::Deserialize<'de>,
 {
     fn deserialize<D>(deserializer: D) -> Result<OptionParam<T>, D::Error>
     where
@@ -183,7 +182,7 @@ pub fn from_str<T: for<'de> serde::Deserialize<'de>>(json: &str) -> crate::Resul
     )?)
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveOpenFileCreatePost {
     pub drive_id: String,
     pub parent_file_id: String,
@@ -202,7 +201,7 @@ pub struct AdriveOpenFileCreatePost {
     pub local_modified_at: Option<chrono::DateTime<Local>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFilePartInfo {
     pub part_number: i64,
 }
@@ -214,7 +213,7 @@ impl AdriveOpenFilePartInfo {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileStreamInfo {
     pub content_hash: String,
     pub content_hash_name: String,

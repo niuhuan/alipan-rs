@@ -96,7 +96,7 @@ impl AdriveOpenFileGetRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetRequestPost {
     pub drive_id: String,
     pub file_id: String,
@@ -136,7 +136,7 @@ impl AdriveOpenFileGetRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveOpenFileGet {
     pub drive_id: String,
     pub file_id: String,

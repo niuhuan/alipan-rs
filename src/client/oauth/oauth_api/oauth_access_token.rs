@@ -116,7 +116,7 @@ impl OauthAccessTokenRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct OauthAccessToken {
     /// token_type
     pub token_type: String,

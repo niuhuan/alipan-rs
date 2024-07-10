@@ -1,5 +1,6 @@
 use crate::{response, AdriveClient, BoxedAccessTokenLoader, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
+use serde_json::Value;
 use std::ops::Deref;
 use std::sync::Arc;
 
@@ -29,7 +30,7 @@ pub struct AdriveOpenFileListUploadedPartsRequest {
     pub part_number_marker: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileListUploadedPartsRequestPost {
     pub drive_id: Option<String>,
     pub file_id: Option<String>,
@@ -102,5 +103,11 @@ impl AdriveOpenFileListUploadedPartsRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct AdriveOpenFileListUploadedParts {}
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+pub struct AdriveOpenFileListUploadedParts {
+    pub drive_id: String,
+    pub upload_id: String,
+    pub parallel_upload: bool,
+    pub uploaded_parts: Vec<Value>,
+    pub next_part_number_marker: Option<String>,
+}

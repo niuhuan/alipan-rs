@@ -30,7 +30,7 @@ pub struct AdriveOpenFileCopyRequest {
     pub auto_rename: OptionParam<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileCopyRequestPost {
     pub drive_id: String,
     pub file_id: String,
@@ -116,7 +116,7 @@ impl AdriveOpenFileCopyRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileCopy {
     pub drive_id: String,
     pub file_id: String,

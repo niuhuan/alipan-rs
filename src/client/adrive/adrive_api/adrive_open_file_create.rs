@@ -208,7 +208,7 @@ impl AdriveOpenFileCreateRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileCreate {
     pub drive_id: String,
     pub file_id: String,

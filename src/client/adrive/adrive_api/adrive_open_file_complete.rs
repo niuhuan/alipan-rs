@@ -26,7 +26,7 @@ pub struct AdriveOpenFileCompleteRequest {
     pub upload_id: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileCompleteRequestPost {
     pub drive_id: String,
     pub file_id: String,
@@ -98,7 +98,7 @@ impl AdriveOpenFileCompleteRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileComplete {
     pub drive_id: String,
     pub file_id: String,

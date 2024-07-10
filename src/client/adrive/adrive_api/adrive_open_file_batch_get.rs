@@ -29,7 +29,7 @@ pub struct AdriveOpenFileBatchGetRequest {
     pub image_thumbnail_width: OptionParam<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileBatchGetRequestPost {
     pub file_list: Vec<AdriveOpenFileBatchGetRequestFileList>,
     pub video_thumbnail_time: Option<i64>,
@@ -78,7 +78,7 @@ impl AdriveOpenFileBatchGetRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileBatchGetRequestFileList {
     pub drive_id: String,
     pub file_id: String,
@@ -117,12 +117,12 @@ impl AdriveOpenFileBatchGetRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileBatchGetResponse {
     pub items: Vec<AdriveOpenFileBatchGetResponseItem>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileBatchGetResponseItem {
     pub drive_id: String,
     pub file_id: String,

@@ -25,7 +25,7 @@ pub struct AdriveOpenFileGetByPathRequest {
     pub file_path: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetByPathRequestPost {
     pub drive_id: String,
     pub file_path: String,

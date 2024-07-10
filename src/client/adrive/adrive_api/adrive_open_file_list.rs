@@ -47,7 +47,7 @@ pub struct AdriveOpenFileListRequest {
     pub fields: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileListRequestPost {
     pub drive_id: String,
     pub limit: Option<i64>,
