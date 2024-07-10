@@ -1,4 +1,4 @@
-use crate::{AdriveOpenFilePartInfo, AdriveOpenFileType};
+use crate::AdriveOpenFileType;
 use serde::Deserialize;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
@@ -74,25 +74,7 @@ pub struct AdriveOpenFile {
     pub video_preview_metadata: Option<Value>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AdriveOpenFileCreate {
-    pub drive_id: String,
-    pub file_id: String,
-    pub status: Option<String>,
-    pub parent_file_id: String,
-    pub upload_id: Option<String>,
-    pub file_name: String,
-    #[serde(deserialize_with = "null_to_default")]
-    pub available: bool,
-    #[serde(deserialize_with = "null_to_default")]
-    pub exist: bool,
-    #[serde(deserialize_with = "null_to_default")]
-    pub rapid_upload: bool,
-    #[serde(deserialize_with = "null_to_default")]
-    pub part_info_list: Vec<AdriveOpenFilePartInfo>,
-}
-
-fn null_to_default<'de, D, T>(deserializer: D) -> Result<T, D::Error>
+pub fn null_to_default<'de, D, T>(deserializer: D) -> Result<T, D::Error>
 where
     D: serde::Deserializer<'de>,
     T: Default + serde::Deserialize<'de>,

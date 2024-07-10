@@ -1,9 +1,10 @@
 use crate::client::common::access_token_loader::AccessTokenLoader;
 use crate::{
-    response, AdriveOpenFileCreate, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
+    null_to_default, response, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
     AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode, OptionParam,
 };
 use chrono::Local;
+use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
 
@@ -179,4 +180,22 @@ impl AdriveOpenFileCreateRequest {
         self.local_modified_at = local_modified_at.into();
         self
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveOpenFileCreate {
+    pub drive_id: String,
+    pub file_id: String,
+    pub status: Option<String>,
+    pub parent_file_id: String,
+    pub upload_id: Option<String>,
+    pub file_name: String,
+    #[serde(deserialize_with = "null_to_default")]
+    pub available: bool,
+    #[serde(deserialize_with = "null_to_default")]
+    pub exist: bool,
+    #[serde(deserialize_with = "null_to_default")]
+    pub rapid_upload: bool,
+    #[serde(deserialize_with = "null_to_default")]
+    pub part_info_list: Vec<AdriveOpenFilePartInfo>,
 }

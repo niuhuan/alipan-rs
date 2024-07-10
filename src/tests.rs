@@ -329,3 +329,21 @@ async fn test_adrive_open_file_complete() -> anyhow::Result<()> {
     println!("{}", serde_json::to_string(&open_file_complete)?);
     Ok(())
 }
+
+#[tokio::test]
+async fn test_adrive_open_file_update() -> anyhow::Result<()> {
+    let open_file_update = crate::tests::client()
+        .await
+        .adrive_open_file_update()
+        .await
+        .drive_id(crate::tests::drive_id().await?)
+        .file_id("file_id".to_string())
+        .name("test.txt".to_string())
+        .check_name_mode(CheckNameMode::Refuse)
+        .starred(false)
+        .request()
+        .await?;
+    println!("{:?}", open_file_update);
+    println!("{}", serde_json::to_string(&open_file_update)?);
+    Ok(())
+}
