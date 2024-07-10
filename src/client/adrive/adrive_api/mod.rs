@@ -1,20 +1,22 @@
+pub mod adrive_open_file_async_task_get;
 pub mod adrive_open_file_complete;
 pub mod adrive_open_file_copy;
 pub mod adrive_open_file_create;
 mod adrive_open_file_delete;
 pub mod adrive_open_file_get;
-mod adrive_open_file_get_by_path;
-mod adrive_open_file_get_download_url;
+pub mod adrive_open_file_get_by_path;
+pub mod adrive_open_file_get_download_url;
 pub mod adrive_open_file_get_upload_url;
 pub mod adrive_open_file_list;
 pub mod adrive_open_file_list_uploaded_parts;
 pub mod adrive_open_file_move;
-mod adrive_open_file_recyclebin_trash;
+pub mod adrive_open_file_recyclebin_trash;
 pub mod adrive_open_file_update;
 pub mod adrive_user_get_drive_info;
 pub mod adrive_user_get_space_info;
 pub mod put_resource;
 
+pub use adrive_open_file_async_task_get::*;
 pub use adrive_open_file_complete::*;
 pub use adrive_open_file_copy::*;
 pub use adrive_open_file_create::*;

@@ -87,6 +87,12 @@ enum_str!(CheckNameMode {
     Ignore("ignore"),
 });
 
+enum_str!(AdriveAsyncTaskState {
+    Succeed("Succeed"),
+    Running("Running"),
+    Failed("Failed"),
+});
+
 #[derive(Debug)]
 pub struct OptionParam<T>(pub Option<T>);
 
