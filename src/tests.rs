@@ -195,6 +195,21 @@ async fn test_adrive_open_file_get_by_path() -> anyhow::Result<()> {
 }
 
 #[tokio::test]
+async fn test_adrive_open_file_get_download_url() -> anyhow::Result<()> {
+    let client = client().await;
+    let open_file_get_download_url = client
+        .adrive_open_file_get_download_url()
+        .await
+        .drive_id(drive_id().await?)
+        .file_id("file_id".to_string())
+        .expire_sec(3600)
+        .request()
+        .await?;
+    println!("{:?}", open_file_get_download_url);
+    Ok(())
+}
+
+#[tokio::test]
 async fn test_adrive_open_file_create_folder() -> anyhow::Result<()> {
     let client = client().await;
     let drive_id = drive_id().await?;
