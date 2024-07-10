@@ -1,9 +1,32 @@
 use crate::{
-    response, AccessTokenLoader, AdriveOpenFileList, AdriveOpenFileType, Error, OptionParam,
+    response, AccessTokenLoader, AdriveClient, AdriveOpenFileList, AdriveOpenFileType, Error,
+    OptionParam,
 };
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
+
+impl AdriveClient {
+    pub async fn adrive_open_file_list(&self) -> AdriveOpenFileListRequest {
+        AdriveOpenFileListRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: "".to_string(),
+            limit: None.into(),
+            marker: None.into(),
+            order_by: None.into(),
+            order_direction: None.into(),
+            parent_file_id: "root".to_string(),
+            category: None.into(),
+            r#type: None.into(),
+            video_thumbnail_time: None.into(),
+            video_thumbnail_width: None.into(),
+            image_thumbnail_width: None.into(),
+            fields: None.into(),
+        }
+    }
+}
 
 pub struct AdriveOpenFileListRequest {
     pub agent: Arc<reqwest::Client>,

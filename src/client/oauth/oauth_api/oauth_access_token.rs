@@ -1,8 +1,23 @@
-use crate::{response, AlipanError, GrantType, OptionParam};
+use crate::{response, AlipanError, GrantType, OAuthClient, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ops::Deref;
 use std::sync::Arc;
+
+impl OAuthClient {
+    pub async fn oauth_access_token(&self) -> OauthAccessTokenRequest {
+        OauthAccessTokenRequest {
+            agent: self.agent.lock().await.clone(),
+            api_host: self.api_host.lock().await.clone(),
+            client_id: self.client_id.lock().await.clone(),
+            client_secret: self.client_secret.lock().await.clone(),
+            grant_type: None.into(),
+            code: None.into(),
+            refresh_token: None.into(),
+            code_verifier: None.into(),
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct OauthAccessTokenRequest {

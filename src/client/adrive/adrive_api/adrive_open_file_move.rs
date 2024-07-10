@@ -1,7 +1,22 @@
-use crate::{response, AccessTokenLoader, CheckNameMode, OptionParam};
+use crate::{response, AccessTokenLoader, AdriveClient, CheckNameMode, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
+
+impl AdriveClient {
+    pub async fn adrive_open_file_move(&self) -> AdriveOpenFileMoveRequest {
+        AdriveOpenFileMoveRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            to_parent_file_id: None.into(),
+            check_name_mode: None.into(),
+            new_name: None.into(),
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct AdriveOpenFileMoveRequest {

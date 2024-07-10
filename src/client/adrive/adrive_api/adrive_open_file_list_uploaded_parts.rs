@@ -1,7 +1,23 @@
-use crate::{response, BoxedAccessTokenLoader, OptionParam};
+use crate::{response, AdriveClient, BoxedAccessTokenLoader, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
+
+impl AdriveClient {
+    pub async fn adrive_open_file_list_uploaded_parts(
+        &self,
+    ) -> AdriveOpenFileListUploadedPartsRequest {
+        AdriveOpenFileListUploadedPartsRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            upload_id: None.into(),
+            part_number_marker: None.into(),
+        }
+    }
+}
 
 pub struct AdriveOpenFileListUploadedPartsRequest {
     pub agent: Arc<reqwest::Client>,

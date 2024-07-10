@@ -1,8 +1,22 @@
-use crate::Result;
 use crate::{response, AdriveOpenFilePartInfo, BoxedAccessTokenLoader, OptionParam};
+use crate::{AdriveClient, Result};
 use chrono::Local;
 use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
+
+impl AdriveClient {
+    pub async fn adrive_open_file_get_upload_url(&self) -> AdriveOpenFileGetUploadUrlRequest {
+        AdriveOpenFileGetUploadUrlRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+            drive_id: None.into(),
+            file_id: None.into(),
+            upload_id: None.into(),
+            part_info_list: None.into(),
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct AdriveOpenFileGetUploadUrlRequest {

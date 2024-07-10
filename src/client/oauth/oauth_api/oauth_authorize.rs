@@ -1,5 +1,20 @@
-use crate::Error;
+use crate::{Error, OAuthClient};
 use std::sync::Arc;
+
+impl OAuthClient {
+    pub async fn oauth_authorize(&self) -> OauthAuthorizeUrl {
+        OauthAuthorizeUrl {
+            api_host: self.api_host.lock().await.clone(),
+            client_id: self.client_id.lock().await.clone(),
+            redirect_uri: "".to_string(),
+            scope: "".to_string(),
+            response_type: "code".to_string(),
+            state: None,
+            relogin: None,
+            drive: None,
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct OauthAuthorizeUrl {

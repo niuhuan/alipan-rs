@@ -1,5 +1,15 @@
-use crate::{response, AccessTokenLoader, AdriveUserGetDriveInfo};
+use crate::{response, AccessTokenLoader, AdriveClient, AdriveUserGetDriveInfo};
 use std::sync::Arc;
+
+impl AdriveClient {
+    pub async fn adrive_user_get_drive_info(&self) -> AdriveUserGetDriveInfoRequest {
+        AdriveUserGetDriveInfoRequest {
+            agent: self.clone_agent().await,
+            api_host: self.clone_api_host().await,
+            access_token: self.clone_access_token_loader().await,
+        }
+    }
+}
 
 pub struct AdriveUserGetDriveInfoRequest {
     pub agent: Arc<reqwest::Client>,

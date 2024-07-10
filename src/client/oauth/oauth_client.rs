@@ -1,9 +1,4 @@
 use crate::define::DEFAULT_API_HOST;
-use crate::oauth_access_token::OauthAccessTokenRequest;
-use crate::{
-    OauthAuthorizeUrl, OauthUsersInfoRequest, OauthUsersScopesRequest,
-    UninitializedAccessTokenLoader,
-};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
@@ -49,53 +44,11 @@ impl OAuthClient {
 }
 
 impl OAuthClient {
-    pub async fn oauth_authorize(&self) -> OauthAuthorizeUrl {
-        OauthAuthorizeUrl {
-            api_host: self.api_host.lock().await.clone(),
-            client_id: self.client_id.lock().await.clone(),
-            redirect_uri: "".to_string(),
-            scope: "".to_string(),
-            response_type: "code".to_string(),
-            state: None,
-            relogin: None,
-            drive: None,
-        }
-    }
-
-    pub async fn oauth_access_token(&self) -> OauthAccessTokenRequest {
-        OauthAccessTokenRequest {
-            agent: self.agent.lock().await.clone(),
-            api_host: self.api_host.lock().await.clone(),
-            client_id: self.client_id.lock().await.clone(),
-            client_secret: self.client_secret.lock().await.clone(),
-            grant_type: None.into(),
-            code: None.into(),
-            refresh_token: None.into(),
-            code_verifier: None.into(),
-        }
-    }
-
-    pub async fn oauth_users_info(&self) -> OauthUsersInfoRequest {
-        OauthUsersInfoRequest {
-            agent: self.clone_agent().await,
-            api_host: self.clone_api_host().await,
-            access_token: Arc::new(Box::new(UninitializedAccessTokenLoader {})),
-        }
-    }
-
-    pub async fn oauth_users_scopes(&self) -> OauthUsersScopesRequest {
-        OauthUsersScopesRequest {
-            agent: self.clone_agent().await,
-            api_host: self.clone_api_host().await,
-            access_token: Arc::new(Box::new(UninitializedAccessTokenLoader {})),
-        }
-    }
-
-    async fn clone_agent(&self) -> Arc<reqwest::Client> {
+    pub(crate) async fn clone_agent(&self) -> Arc<reqwest::Client> {
         self.agent.lock().await.clone()
     }
 
-    async fn clone_api_host(&self) -> Arc<String> {
+    pub(crate) async fn clone_api_host(&self) -> Arc<String> {
         self.api_host.lock().await.clone()
     }
 }
