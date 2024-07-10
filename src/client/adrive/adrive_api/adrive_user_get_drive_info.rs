@@ -1,4 +1,4 @@
-use crate::{response, AccessTokenLoader, AdriveClient, AdriveUserGetDriveInfo};
+use crate::{response, AccessTokenLoader, AdriveClient, AdriveUserGetDriveInfo, LoadAccessToken};
 use std::sync::Arc;
 
 impl AdriveClient {
@@ -29,11 +29,11 @@ impl AdriveUserGetDriveInfoRequest {
     }
 
     pub async fn request(&self) -> crate::Result<AdriveUserGetDriveInfo> {
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/user/getDriveInfo", self.api_host.as_str()).as_str())
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .send()
             .await?;
         response(resp).await

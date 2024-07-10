@@ -1,7 +1,5 @@
-// /adrive/v1.0/openFile/get_by_path
-
 use crate::adrive_api::AdriveOpenFileGet;
-use crate::{response, AccessTokenLoader, AdriveClient, Error, OptionParam};
+use crate::{response, AccessTokenLoader, AdriveClient, Error, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -65,7 +63,6 @@ impl AdriveOpenFileGetByPathRequest {
 
 impl AdriveOpenFileGetByPathRequest {
     pub async fn request(&self) -> crate::Result<AdriveOpenFileGet> {
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(
@@ -75,7 +72,8 @@ impl AdriveOpenFileGetByPathRequest {
                 )
                 .as_str(),
             )
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&AdriveOpenFileGetByPathRequestPost {
                 drive_id: if let Some(drive_id) = &self.drive_id.deref() {
                     drive_id.to_owned()

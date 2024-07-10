@@ -1,4 +1,7 @@
-use crate::{response, AccessTokenLoader, AdriveClient, AdriveOpenFileType, Error, OptionParam};
+use crate::{
+    response, AccessTokenLoader, AdriveClient, AdriveOpenFileType, Error, LoadAccessToken,
+    OptionParam,
+};
 use chrono::Local;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
@@ -121,11 +124,11 @@ impl AdriveOpenFileGetRequest {
             image_thumbnail_width: self.image_thumbnail_width.deref().clone(),
             fields: self.fields.deref().clone(),
         };
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/openFile/get", self.api_host.as_str()).as_str())
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&params)
             .send()
             .await?;

@@ -1,4 +1,6 @@
-use crate::{response, AdriveOpenFilePartInfo, BoxedAccessTokenLoader, OptionParam};
+use crate::{
+    response, AdriveOpenFilePartInfo, BoxedAccessTokenLoader, LoadAccessToken, OptionParam,
+};
 use crate::{AdriveClient, Result};
 use chrono::Local;
 use serde_derive::{Deserialize, Serialize};
@@ -80,20 +82,20 @@ impl AdriveOpenFileGetUploadUrlRequest {
 impl AdriveOpenFileGetUploadUrlRequest {
     pub async fn request(&self) -> Result<AdriveOpenFileGetUploadUrl> {
         let url = format!("{}/adrive/v1.0/openFile/getUploadUrl", self.api_host);
-        let client = self.agent.clone();
-        let access_token = self.access_token.clone();
-        let mut request = client.post(&url).header(
-            "Authorization",
-            access_token.get_access_token().await?.access_token,
-        );
         let post = AdriveOpenFileGetUploadUrlRequestPost {
             drive_id: self.drive_id.clone().into(),
             file_id: self.file_id.clone().into(),
             upload_id: self.upload_id.clone().into(),
             part_info_list: self.part_info_list.clone().into(),
         };
-        request = request.json(&post);
-        let rsp = request.send().await?;
+        let rsp = self
+            .agent
+            .post(&url)
+            .load_access_token(self.access_token.clone())
+            .await?
+            .json(&post)
+            .send()
+            .await?;
         response(rsp).await
     }
 }

@@ -1,4 +1,4 @@
-use crate::{response, AdriveClient, BoxedAccessTokenLoader, OptionParam};
+use crate::{response, AdriveClient, BoxedAccessTokenLoader, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -71,7 +71,6 @@ impl AdriveOpenFileListUploadedPartsRequest {
 
 impl AdriveOpenFileListUploadedPartsRequest {
     pub async fn request(&self) -> crate::Result<AdriveOpenFileListUploadedParts> {
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(
@@ -81,7 +80,8 @@ impl AdriveOpenFileListUploadedPartsRequest {
                 )
                 .as_str(),
             )
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&AdriveOpenFileListUploadedPartsRequestPost {
                 drive_id: if let Some(v) = &self.drive_id.deref() {
                     Some(v.clone())

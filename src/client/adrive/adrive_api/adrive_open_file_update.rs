@@ -1,4 +1,7 @@
-use crate::{AccessTokenLoader, AdriveClient, AdriveOpenFileType, CheckNameMode, OptionParam};
+use crate::{
+    AccessTokenLoader, AdriveClient, AdriveOpenFileType, CheckNameMode, LoadAccessToken,
+    OptionParam,
+};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -92,13 +95,8 @@ impl AdriveOpenFileUpdateRequest {
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/openFile/update", self.api_host.as_str()).as_str())
-            .header(
-                "Authorization",
-                format!(
-                    "Bearer {}",
-                    self.access_token.get_access_token().await?.access_token
-                ),
-            )
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&AdriveOpenFileUpdateRequestPost {
                 drive_id: if let Some(ref v) = self.drive_id.deref() {
                     v.clone()

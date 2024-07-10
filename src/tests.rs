@@ -140,6 +140,14 @@ async fn test_oauth_users_scopes() -> anyhow::Result<()> {
 }
 
 #[tokio::test]
+async fn test_user_get_vip_info() -> anyhow::Result<()> {
+    let client = client().await;
+    let vip_info = client.user_get_vip_info().await.request().await?;
+    println!("{:?}", vip_info);
+    Ok(())
+}
+
+#[tokio::test]
 async fn test_adrive_user_get_drive_info() -> anyhow::Result<()> {
     let client = client().await;
     let drive_info = client.adrive_user_get_drive_info().await.request().await?;

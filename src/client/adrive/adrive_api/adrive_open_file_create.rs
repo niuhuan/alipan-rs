@@ -1,7 +1,7 @@
 use crate::client::common::access_token_loader::AccessTokenLoader;
 use crate::{
     null_to_default, response, AdriveClient, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
-    AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode, OptionParam,
+    AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode, LoadAccessToken, OptionParam,
 };
 use chrono::Local;
 use serde_derive::{Deserialize, Serialize};
@@ -93,11 +93,11 @@ impl AdriveOpenFileCreateRequest {
             local_created_at: self.local_created_at.clone(),
             local_modified_at: self.local_modified_at.clone(),
         };
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/openFile/create", self.api_host.as_str()).as_str())
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&params)
             .send()
             .await?;

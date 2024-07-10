@@ -1,4 +1,4 @@
-use crate::{response, AccessTokenLoader, AdriveClient, OptionParam};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
 
@@ -61,12 +61,12 @@ impl AdriveOpenFileRecyclebinTrashRequest {
 
 impl AdriveOpenFileRecyclebinTrashRequest {
     pub async fn request(&self) -> crate::Result<AdriveOpenFileRecyclebinTrash> {
-        let token = self.access_token.get_access_token().await?;
         let url = format!("{}/adrive/v1.0/openFile/recyclebin/trash", self.api_host);
         let resp = self
             .agent
             .post(&url)
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&AdriveOpenFileRecyclebinTrashPost {
                 drive_id: if let Some(drive_id) = self.drive_id.as_ref() {
                     drive_id.to_string()

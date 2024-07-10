@@ -1,4 +1,6 @@
-use crate::{response, AccessTokenLoader, AdriveClient, OAuthClient, OauthUsersScopes};
+use crate::{
+    response, AccessTokenLoader, AdriveClient, LoadAccessToken, OAuthClient, OauthUsersScopes,
+};
 use std::sync::Arc;
 
 impl OAuthClient {
@@ -41,11 +43,11 @@ impl OauthUsersScopesRequest {
     }
 
     pub async fn request(&self) -> crate::Result<OauthUsersScopes> {
-        let token = self.access_token.get_access_token().await?;
         let resp = self
             .agent
             .get(format!("{}/oauth/users/scopes", self.api_host.as_str()).as_str())
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .send()
             .await?;
         response(resp).await

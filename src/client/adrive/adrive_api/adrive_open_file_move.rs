@@ -1,4 +1,6 @@
-use crate::{response, AccessTokenLoader, AdriveClient, CheckNameMode, OptionParam};
+use crate::{
+    response, AccessTokenLoader, AdriveClient, CheckNameMode, LoadAccessToken, OptionParam,
+};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -92,14 +94,8 @@ impl AdriveOpenFileMoveRequest {
         let resp = self
             .agent
             .post(format!("{}/adrive/v1.0/openFile/move", self.api_host.as_str()).as_str())
-            .header(
-                "Authorization",
-                format!(
-                    "Bearer {}",
-                    self.access_token.get_access_token().await?.access_token
-                )
-                .as_str(),
-            )
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&AdriveOpenFileMoveRequestPost {
                 drive_id: if let Some(drive_id) = self.drive_id.deref() {
                     drive_id.deref().to_string()

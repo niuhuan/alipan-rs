@@ -1,4 +1,6 @@
-use crate::{response, AccessTokenLoader, AdriveAsyncTaskState, AdriveClient, OptionParam};
+use crate::{
+    response, AccessTokenLoader, AdriveAsyncTaskState, AdriveClient, LoadAccessToken, OptionParam,
+};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -54,7 +56,6 @@ impl AdriveOpenFileAsyncTaskGetRequest {
 
 impl AdriveOpenFileAsyncTaskGetRequest {
     pub async fn request(&self) -> crate::Result<AdriveOpenFileAsyncTaskGet> {
-        let token = self.access_token.get_access_token().await?;
         let url = format!(
             "{}/adrive/v1.0/openFile/async_task/get",
             self.api_host.deref().as_str()
@@ -69,7 +70,8 @@ impl AdriveOpenFileAsyncTaskGetRequest {
         let resp = self
             .agent
             .post(&url)
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&post)
             .send()
             .await?;

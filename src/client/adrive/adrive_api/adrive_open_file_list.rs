@@ -1,6 +1,6 @@
 use crate::{
     response, AccessTokenLoader, AdriveClient, AdriveOpenFileList, AdriveOpenFileType, Error,
-    OptionParam,
+    LoadAccessToken, OptionParam,
 };
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
@@ -163,14 +163,14 @@ impl AdriveOpenFileListRequest {
             image_thumbnail_width: self.image_thumbnail_width.deref().clone(),
             fields: self.fields.deref().clone(),
         };
-        let token = self.access_token.get_access_token().await?;
         let url = url::Url::parse(
             format!("{}/adrive/v1.0/openFile/list", self.api_host.as_str()).as_str(),
         )?;
         let resp = self
             .agent
             .post(url)
-            .header("Authorization", format!("Bearer {}", token.access_token))
+            .load_access_token(self.access_token.clone())
+            .await?
             .json(&form)
             .send()
             .await?;
