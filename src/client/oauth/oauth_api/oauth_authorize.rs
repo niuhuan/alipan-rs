@@ -36,8 +36,8 @@ pub struct OauthAuthorizeUrl {
 }
 
 impl OauthAuthorizeUrl {
-    pub fn api_host(mut self, api_host: impl Into<String>) -> Self {
-        self.api_host = Arc::new(api_host.into());
+    pub fn api_host(mut self, api_host: impl Into<Arc<String>>) -> Self {
+        self.api_host = api_host.into();
         self
     }
 

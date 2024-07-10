@@ -37,8 +37,8 @@ impl OAuthClient {
         self
     }
 
-    pub async fn set_agent(self, agent: reqwest::Client) -> Self {
-        *self.agent.lock().await = Arc::new(agent);
+    pub async fn set_agent(self, agent: impl Into<Arc<reqwest::Client>>) -> Self {
+        *self.agent.lock().await = agent.into();
         self
     }
 }

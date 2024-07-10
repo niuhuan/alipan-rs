@@ -76,6 +76,8 @@ async fn client() -> AdriveClient {
         .await
         .set_access_token_loader(access_token_loader().await)
         .await
+        .set_agent(reqwest::Client::new())
+        .await
 }
 
 // 测试内容
