@@ -21,4 +21,16 @@ ALIPAN-RS
 
 ## 使用方法
 
+在`[dependencies]`中加入
+
+```toml
+alipan = "0"
+```
+
+或
+
+```chatinput
+alipan = { git = "https://github.com/niuhuan/alipan-rs.git" }
+```
+
 参考 [tests.ts](src/tests.rs)
