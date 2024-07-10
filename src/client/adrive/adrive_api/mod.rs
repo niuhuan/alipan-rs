@@ -2,6 +2,7 @@ pub mod adrive_open_file_complete;
 pub mod adrive_open_file_copy;
 pub mod adrive_open_file_create;
 pub mod adrive_open_file_get;
+mod adrive_open_file_get_by_path;
 pub mod adrive_open_file_get_upload_url;
 pub mod adrive_open_file_list;
 pub mod adrive_open_file_list_uploaded_parts;
