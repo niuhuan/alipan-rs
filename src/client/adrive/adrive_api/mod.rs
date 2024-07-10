@@ -1,4 +1,5 @@
 pub mod adrive_open_file_async_task_get;
+pub mod adrive_open_file_batch_get;
 pub mod adrive_open_file_complete;
 pub mod adrive_open_file_copy;
 pub mod adrive_open_file_create;
@@ -20,6 +21,7 @@ pub mod put_resource;
 pub mod user_get_vip_info;
 
 pub use adrive_open_file_async_task_get::*;
+pub use adrive_open_file_batch_get::*;
 pub use adrive_open_file_complete::*;
 pub use adrive_open_file_copy::*;
 pub use adrive_open_file_create::*;

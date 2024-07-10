@@ -1,4 +1,5 @@
-use crate::{response, AccessTokenLoader, AdriveClient, AdriveUserGetDriveInfo, LoadAccessToken};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken};
+use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
 
 impl AdriveClient {
@@ -38,4 +39,14 @@ impl AdriveUserGetDriveInfoRequest {
             .await?;
         response(resp).await
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserGetDriveInfo {
+    pub user_id: String,
+    pub name: String,
+    pub avatar: String,
+    pub default_drive_id: String,
+    pub resource_drive_id: Option<String>,
+    pub backup_drive_id: Option<String>,
 }

@@ -1,4 +1,5 @@
-use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OauthUsersScopes};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken};
+use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
 
 impl AdriveClient {
@@ -38,4 +39,15 @@ impl OauthUsersScopesRequest {
             .await?;
         response(resp).await
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthUsersScopes {
+    pub id: String,
+    pub scopes: Vec<OauthUsersScope>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OauthUsersScope {
+    pub scope: String,
 }

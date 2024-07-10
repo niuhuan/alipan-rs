@@ -4,46 +4,6 @@ use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OauthUsersInfo {
-    pub id: String,
-    pub name: String,
-    pub avatar: String,
-    pub phone: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OauthUsersScopes {
-    pub id: String,
-    pub scopes: Vec<OauthUsersScope>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OauthUsersScope {
-    pub scope: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AdriveUserGetDriveInfo {
-    pub user_id: String,
-    pub name: String,
-    pub avatar: String,
-    pub default_drive_id: String,
-    pub resource_drive_id: Option<String>,
-    pub backup_drive_id: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AdriveUserGetSpaceInfo {
-    pub personal_space_info: AdriveUserSpaceInfo,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AdriveUserSpaceInfo {
-    pub used_size: i64,
-    pub total_size: i64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AdriveOpenFileList {
     pub items: Vec<AdriveOpenFile>,
     #[serde(deserialize_with = "blank_to_null")]

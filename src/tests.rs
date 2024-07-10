@@ -1,8 +1,9 @@
 use crate::adrive_api::put_resource::PutResource;
 use crate::client::common::access_token_loader::AccessToken;
 use crate::{
-    AdriveClient, AdriveOpenFileType, BoxedAccessTokenLoader, CheckNameMode, GrantType,
-    OAuthClient, OAuthClientAccessTokenManager, OAuthClientAccessTokenStore,
+    AdriveClient, AdriveOpenFileBatchGetRequestFileList, AdriveOpenFileType,
+    BoxedAccessTokenLoader, CheckNameMode, GrantType, OAuthClient, OAuthClientAccessTokenManager,
+    OAuthClientAccessTokenStore,
 };
 use async_trait::async_trait;
 use serde_derive::{Deserialize, Serialize};
@@ -201,6 +202,28 @@ async fn test_adrive_open_file_get_by_path() -> anyhow::Result<()> {
         .request()
         .await?;
     println!("{:?}", open_file_get_by_path);
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_adrive_open_file_batch_get() -> anyhow::Result<()> {
+    let client = client().await;
+    let open_file_batch_get = client
+        .adrive_open_file_batch_get()
+        .await
+        .file_list(vec![
+            AdriveOpenFileBatchGetRequestFileList {
+                drive_id: drive_id().await?,
+                file_id: "668109d097d307b7e040443e9e20659deb6784d5".to_string(),
+            },
+            AdriveOpenFileBatchGetRequestFileList {
+                drive_id: drive_id().await?,
+                file_id: "668cce5e7c6d6e8c7d5447a9b2903cd7797522be".to_string(),
+            },
+        ])
+        .request()
+        .await?;
+    println!("{:?}", open_file_batch_get);
     Ok(())
 }
 

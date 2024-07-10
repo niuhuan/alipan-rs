@@ -1,4 +1,5 @@
-use crate::{response, AccessTokenLoader, AdriveClient, AdriveUserGetSpaceInfo, LoadAccessToken};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken};
+use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
 
 impl AdriveClient {
@@ -38,4 +39,15 @@ impl AdriveUserGetSpaceInfoRequest {
             .await?;
         response(resp).await
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserGetSpaceInfo {
+    pub personal_space_info: AdriveUserSpaceInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AdriveUserSpaceInfo {
+    pub used_size: i64,
+    pub total_size: i64,
 }
