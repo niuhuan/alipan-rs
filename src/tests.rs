@@ -324,6 +324,8 @@ const LARGE_FILE_NAME: &str =
 
 // 分片序列号，从 1 开始 单个文件分片最大限制5GB，最小限制 100KB
 
+// 通过channel传递, 读取文件，分片上传, (更好的效果应该是直接复写reader只读指定区域进行分片)
+
 #[tokio::test]
 async fn test_adrive_open_file_create_large_upload() -> anyhow::Result<()> {
     let client = client().await;
