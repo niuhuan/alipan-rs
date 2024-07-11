@@ -24,7 +24,7 @@ pub struct AdriveOpenFileDeleteRequest {
     pub file_id: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileDeletePost {
     pub drive_id: String,
     pub file_id: String,
@@ -86,7 +86,7 @@ impl AdriveOpenFileDeleteRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileDelete {
     pub drive_id: String,
     pub file_id: String,

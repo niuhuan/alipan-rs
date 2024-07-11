@@ -20,7 +20,7 @@ pub struct UserGetVipInfoRequest {
     pub access_token: Arc<Box<dyn AccessTokenLoader>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct UserGetVipInfoPost {}
 
 impl UserGetVipInfoRequest {
@@ -58,7 +58,7 @@ impl UserGetVipInfoRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct UserGetVipInfo {
     pub identity: String,
     pub level: Option<String>,

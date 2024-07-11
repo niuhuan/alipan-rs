@@ -30,7 +30,7 @@ pub struct AdriveOpenFileListUploadedPartsRequest {
     pub part_number_marker: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileListUploadedPartsRequestPost {
     pub drive_id: Option<String>,
     pub file_id: Option<String>,
@@ -103,7 +103,7 @@ impl AdriveOpenFileListUploadedPartsRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileListUploadedParts {
     #[serde(default)]
     pub drive_id: String,
@@ -114,7 +114,7 @@ pub struct AdriveOpenFileListUploadedParts {
     pub next_part_number_marker: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct UploadedParts {
     pub content_type: String,
     pub etag: Option<String>,

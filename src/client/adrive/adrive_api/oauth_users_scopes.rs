@@ -41,13 +41,13 @@ impl OauthUsersScopesRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct OauthUsersScopes {
     pub id: String,
     pub scopes: Vec<OauthUsersScope>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct OauthUsersScope {
     pub scope: String,
 }

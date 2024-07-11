@@ -41,7 +41,7 @@ impl AdriveUserGetDriveInfoRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq, Default)]
 pub struct AdriveUserGetDriveInfo {
     pub user_id: String,
     pub name: String,

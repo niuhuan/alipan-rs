@@ -32,7 +32,7 @@ pub struct AdriveOpenFileMoveRequest {
     pub new_name: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq, Default)]
 pub struct AdriveOpenFileMoveRequestPost {
     pub drive_id: String,
     pub file_id: String,
@@ -121,7 +121,7 @@ impl AdriveOpenFileMoveRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq, Default)]
 pub struct AdriveOpenFileMove {
     pub drive_id: String,
     pub file_id: String,

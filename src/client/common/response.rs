@@ -2,14 +2,14 @@ use crate::AdriveOpenFileType;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveOpenFileList {
     pub items: Vec<AdriveOpenFile>,
     #[serde(deserialize_with = "blank_to_null")]
     pub next_marker: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveOpenFile {
     pub drive_id: String,
     pub file_id: String,

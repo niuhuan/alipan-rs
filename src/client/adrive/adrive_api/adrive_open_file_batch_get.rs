@@ -29,7 +29,7 @@ pub struct AdriveOpenFileBatchGetRequest {
     pub image_thumbnail_width: OptionParam<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileBatchGetRequestPost {
     pub file_list: Vec<AdriveOpenFileBatchGetRequestFileList>,
     pub video_thumbnail_time: Option<i64>,

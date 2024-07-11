@@ -41,7 +41,7 @@ impl OauthUsersInfoRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct OauthUsersInfo {
     pub id: String,
     pub name: String,

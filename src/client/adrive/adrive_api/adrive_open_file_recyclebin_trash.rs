@@ -23,7 +23,7 @@ pub struct AdriveOpenFileRecyclebinTrashRequest {
     pub file_id: OptionParam<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq, Default)]
 pub struct AdriveOpenFileRecyclebinTrashPost {
     pub drive_id: String,
     pub file_id: String,
@@ -85,7 +85,7 @@ impl AdriveOpenFileRecyclebinTrashRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq, Default)]
 pub struct AdriveOpenFileRecyclebinTrash {
     pub drive_id: String,
     pub file_id: String,

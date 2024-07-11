@@ -26,7 +26,7 @@ pub struct AdriveOpenFileGetDownloadUrlRequest {
     pub expire_sec: OptionParam<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetDownloadUrlRequestPost {
     pub drive_id: String,
     pub file_id: String,
@@ -98,7 +98,7 @@ impl AdriveOpenFileGetDownloadUrlRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetDownloadUrl {
     pub url: String,
     pub expiration: String,

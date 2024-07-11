@@ -41,12 +41,12 @@ impl AdriveUserGetSpaceInfoRequest {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveUserGetSpaceInfo {
     pub personal_space_info: AdriveUserSpaceInfo,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct AdriveUserSpaceInfo {
     pub used_size: i64,
     pub total_size: i64,

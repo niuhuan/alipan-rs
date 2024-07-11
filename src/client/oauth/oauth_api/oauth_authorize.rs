@@ -16,7 +16,7 @@ impl OAuthClient {
     }
 }
 
-#[derive(Debug, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Default, Eq, PartialEq)]
 pub struct OauthAuthorizeUrl {
     pub api_host: Arc<String>,
     /// 创建应用时分配的 appId

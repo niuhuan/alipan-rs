@@ -31,7 +31,7 @@ pub struct AdriveOpenFileGetUploadUrlRequest {
     pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfo>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetUploadUrlRequestPost {
     pub drive_id: Option<String>,
     pub file_id: Option<String>,
@@ -100,7 +100,7 @@ impl AdriveOpenFileGetUploadUrlRequest {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFileGetUploadUrl {
     pub drive_id: String,
     pub file_id: String,
@@ -109,7 +109,7 @@ pub struct AdriveOpenFileGetUploadUrl {
     pub part_info_list: Vec<AdriveOpenFilePartInfoUpload>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
 pub struct AdriveOpenFilePartInfoUpload {
     pub part_number: i64,
     pub part_size: Option<i64>,
