@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 pub type BoxedAccessTokenLoader = Box<dyn AccessTokenLoader>;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default, Eq)]
 pub struct AccessToken {
     pub access_token: String,
     pub token_type: String,
