@@ -95,7 +95,7 @@ async fn test_oauth_authorize() -> anyhow::Result<()> {
         .await
         .oauth_authorize()
         .await
-        .redirect_uri("http://localhost:58443/oauth_authorize")
+        .redirect_uri("http://localhost:58080/oauth_authorize")
         .scope("user:base,file:all:read,file:all:write,album:shared:read")
         .build()?;
     println!("{}", url);
