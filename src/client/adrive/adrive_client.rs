@@ -26,13 +26,13 @@ impl Default for AdriveClient {
 }
 
 impl AdriveClient {
-    pub async fn set_client_id(self, client_id: impl Into<Arc<String>>) -> Self {
-        *self.client_id.lock().await = client_id.into();
+    pub async fn set_client_id(self, client_id: impl Into<String>) -> Self {
+        *self.client_id.lock().await = Arc::new(client_id.into());
         self
     }
 
-    pub async fn set_api_host(self, api_host: impl Into<Arc<String>>) -> Self {
-        *self.api_host.lock().await = api_host.into();
+    pub async fn set_api_host(self, api_host: impl Into<String>) -> Self {
+        *self.api_host.lock().await = Arc::new(api_host.into());
         self
     }
 
