@@ -361,7 +361,7 @@ async fn test_adrive_open_file_create_large_upload() -> anyhow::Result<()> {
         .await?;
     println!("{}", serde_json::to_string(&open_file_create)?);
     if open_file_create.exist {
-        return Err(anyhow!(" d"));
+        return Err(anyhow!("file exist"));
     }
     // 确定有没有秒传
     if open_file_create.rapid_upload {
