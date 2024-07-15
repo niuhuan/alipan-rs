@@ -1,3 +1,4 @@
+use crate::response::null_to_default;
 use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
@@ -103,9 +104,13 @@ pub struct AdriveOpenFileComplete {
     pub drive_id: String,
     pub file_id: String,
     pub name: String,
+    #[serde(deserialize_with = "null_to_default")]
     pub size: i64,
+    #[serde(deserialize_with = "null_to_default")]
     pub file_extension: String,
+    #[serde(deserialize_with = "null_to_default")]
     pub content_hash: String,
+    #[serde(deserialize_with = "null_to_default")]
     pub category: String,
     pub r#type: String,
     pub thumbnail: Option<String>,
