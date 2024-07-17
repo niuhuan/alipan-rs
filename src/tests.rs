@@ -426,7 +426,7 @@ async fn put_file(url: &str, path: &str, skip: i64, read_len: i64) -> anyhow::Re
     let request = reqwest::Client::new().put(url).body(body).send();
     let cp = sender.clone();
     let read_file_back = async move {
-        let result = put_steam(cp, path, skip, read_len).await;
+        let result = put_stream(cp, path, skip, read_len).await;
         if let Err(e) = result {
             let _ = sender.send(Err(e)).await;
         }
@@ -436,7 +436,7 @@ async fn put_file(url: &str, path: &str, skip: i64, read_len: i64) -> anyhow::Re
     Ok(())
 }
 
-async fn put_steam(
+async fn put_stream(
     sender: tokio::sync::mpsc::Sender<anyhow::Result<Vec<u8>>>,
     path: &str,
     skip: i64,
