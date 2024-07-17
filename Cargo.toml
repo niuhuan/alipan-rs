@@ -19,6 +19,7 @@ serde_path_to_error = "0.1.16"
 tokio-stream = "0.1"
 tokio-util = "0.7"
 anyhow = "1"
+tracing = "0.1"
 
 [features]
 default = ["reqwest/default"]
