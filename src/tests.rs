@@ -1,6 +1,6 @@
 use crate::client::common::access_token_loader::AccessToken;
 use crate::{
-    AdriveClient, AdriveOpenFileBatchGetRequestFileList, AdriveOpenFilePartInfo,
+    AdriveClient, AdriveOpenFileBatchGetRequestFileList, AdriveOpenFilePartInfoCreate,
     AdriveOpenFileType, BoxedAccessTokenLoader, CheckNameMode, GrantType, OAuthClient,
     OAuthClientAccessTokenManager, OAuthClientAccessTokenStore,
 };
@@ -341,7 +341,7 @@ async fn test_adrive_open_file_create_large_upload() -> anyhow::Result<()> {
     let part_count = size / part_size + if size % part_size == 0 { 0 } else { 1 };
     // 创建文件
     let parts = (1..=part_count)
-        .map(|i| AdriveOpenFilePartInfo {
+        .map(|i| AdriveOpenFilePartInfoCreate {
             part_number: i as i64,
         })
         .collect::<Vec<_>>();
@@ -384,7 +384,7 @@ async fn test_adrive_open_file_create_large_upload() -> anyhow::Result<()> {
                     .with_context(|| "upload id ")?
                     .as_str(),
             )
-            .part_info_list(vec![AdriveOpenFilePartInfo {
+            .part_info_list(vec![AdriveOpenFilePartInfoCreate {
                 part_number: x.part_number,
             }])
             .request()

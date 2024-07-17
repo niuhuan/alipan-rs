@@ -189,7 +189,7 @@ pub struct AdriveOpenFileCreatePost {
     pub name: String,
     pub r#type: AdriveOpenFileType,
     pub check_name_mode: CheckNameMode,
-    pub part_info_list: Option<Vec<AdriveOpenFilePartInfo>>,
+    pub part_info_list: Option<Vec<AdriveOpenFilePartInfoCreate>>,
     pub streams_info: Option<Vec<AdriveOpenFileStreamInfo>>,
     pub pre_hash: Option<String>,
     pub size: Option<i64>,
@@ -202,11 +202,11 @@ pub struct AdriveOpenFileCreatePost {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
-pub struct AdriveOpenFilePartInfo {
+pub struct AdriveOpenFilePartInfoCreate {
     pub part_number: i64,
 }
 
-impl AdriveOpenFilePartInfo {
+impl AdriveOpenFilePartInfoCreate {
     pub fn part_number(mut self, part_number: i64) -> Self {
         self.part_number = part_number;
         self
@@ -222,7 +222,7 @@ pub struct AdriveOpenFileStreamInfo {
     pub content_md5: String,
     pub pre_hash: String,
     pub size: i64,
-    pub part_info_list: Vec<AdriveOpenFilePartInfo>,
+    pub part_info_list: Vec<AdriveOpenFilePartInfoCreate>,
 }
 
 impl AdriveOpenFileStreamInfo {
@@ -261,7 +261,7 @@ impl AdriveOpenFileStreamInfo {
         self
     }
 
-    pub fn part_info_list(mut self, part_info_list: Vec<AdriveOpenFilePartInfo>) -> Self {
+    pub fn part_info_list(mut self, part_info_list: Vec<AdriveOpenFilePartInfoCreate>) -> Self {
         self.part_info_list = part_info_list;
         self
     }

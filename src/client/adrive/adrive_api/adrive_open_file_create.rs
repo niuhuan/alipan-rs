@@ -1,8 +1,9 @@
 use crate::client::common::access_token_loader::AccessTokenLoader;
 use crate::response::null_to_default;
 use crate::{
-    response, AdriveClient, AdriveOpenFileCreatePost, AdriveOpenFilePartInfo,
-    AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode, LoadAccessToken, OptionParam,
+    response, AdriveClient, AdriveOpenFileCreatePost, AdriveOpenFilePartInfoCreate,
+    AdriveOpenFilePartInfoUpload, AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode,
+    LoadAccessToken, OptionParam,
 };
 use chrono::Local;
 use serde_derive::{Deserialize, Serialize};
@@ -43,7 +44,7 @@ pub struct AdriveOpenFileCreateRequest {
     pub name: OptionParam<String>,
     pub r#type: OptionParam<AdriveOpenFileType>,
     pub check_name_mode: OptionParam<CheckNameMode>,
-    pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfo>>,
+    pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfoCreate>>,
     pub streams_info: OptionParam<Vec<AdriveOpenFileStreamInfo>>,
     pub pre_hash: OptionParam<String>,
     pub size: OptionParam<i64>,
@@ -147,7 +148,7 @@ impl AdriveOpenFileCreateRequest {
 
     pub fn part_info_list(
         mut self,
-        part_info_list: impl Into<OptionParam<Vec<AdriveOpenFilePartInfo>>>,
+        part_info_list: impl Into<OptionParam<Vec<AdriveOpenFilePartInfoCreate>>>,
     ) -> Self {
         self.part_info_list = part_info_list.into();
         self
@@ -223,5 +224,5 @@ pub struct AdriveOpenFileCreate {
     #[serde(deserialize_with = "null_to_default")]
     pub rapid_upload: bool,
     #[serde(deserialize_with = "null_to_default")]
-    pub part_info_list: Vec<AdriveOpenFilePartInfo>,
+    pub part_info_list: Vec<AdriveOpenFilePartInfoUpload>,
 }

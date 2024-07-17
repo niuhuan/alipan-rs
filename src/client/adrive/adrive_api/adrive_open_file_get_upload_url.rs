@@ -1,5 +1,5 @@
 use crate::{
-    response, AdriveOpenFilePartInfo, BoxedAccessTokenLoader, LoadAccessToken, OptionParam,
+    response, AdriveOpenFilePartInfoCreate, BoxedAccessTokenLoader, LoadAccessToken, OptionParam,
 };
 use crate::{AdriveClient, Result};
 use chrono::Local;
@@ -28,7 +28,7 @@ pub struct AdriveOpenFileGetUploadUrlRequest {
     pub drive_id: OptionParam<String>,
     pub file_id: OptionParam<String>,
     pub upload_id: OptionParam<String>,
-    pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfo>>,
+    pub part_info_list: OptionParam<Vec<AdriveOpenFilePartInfoCreate>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
@@ -36,7 +36,7 @@ pub struct AdriveOpenFileGetUploadUrlRequestPost {
     pub drive_id: Option<String>,
     pub file_id: Option<String>,
     pub upload_id: Option<String>,
-    pub part_info_list: Option<Vec<AdriveOpenFilePartInfo>>,
+    pub part_info_list: Option<Vec<AdriveOpenFilePartInfoCreate>>,
 }
 
 impl AdriveOpenFileGetUploadUrlRequest {
@@ -72,7 +72,7 @@ impl AdriveOpenFileGetUploadUrlRequest {
 
     pub fn part_info_list(
         mut self,
-        part_info_list: impl Into<OptionParam<Vec<AdriveOpenFilePartInfo>>>,
+        part_info_list: impl Into<OptionParam<Vec<AdriveOpenFilePartInfoCreate>>>,
     ) -> Self {
         self.part_info_list = part_info_list.into();
         self
@@ -113,5 +113,6 @@ pub struct AdriveOpenFileGetUploadUrl {
 pub struct AdriveOpenFilePartInfoUpload {
     pub part_number: i64,
     pub part_size: Option<i64>,
+    #[serde(default)]
     pub upload_url: String,
 }
