@@ -3,7 +3,7 @@ use crate::{
     response, AccessTokenLoader, AdriveClient, AdriveOpenFileType, Error, LoadAccessToken,
     OptionParam,
 };
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 use std::ops::Deref;
@@ -154,8 +154,8 @@ pub struct AdriveOpenFileGet {
     pub r#type: AdriveOpenFileType,
     pub thumbnail: Option<String>,
     pub url: Option<String>,
-    pub created_at: chrono::DateTime<Local>,
-    pub updated_at: chrono::DateTime<Local>,
+    pub created_at: chrono::DateTime<Utc>,
+    pub updated_at: chrono::DateTime<Utc>,
     pub items: Option<Vec<Value>>,
     pub id_path: Option<String>,
     pub name_path: Option<String>,

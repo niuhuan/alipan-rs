@@ -5,7 +5,7 @@ use crate::{
     AdriveOpenFilePartInfoUpload, AdriveOpenFileStreamInfo, AdriveOpenFileType, CheckNameMode,
     LoadAccessToken, OptionParam,
 };
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -52,8 +52,8 @@ pub struct AdriveOpenFileCreateRequest {
     pub content_hash_name: OptionParam<String>,
     pub proof_code: OptionParam<String>,
     pub proof_version: OptionParam<String>,
-    pub local_created_at: OptionParam<chrono::DateTime<Local>>,
-    pub local_modified_at: OptionParam<chrono::DateTime<Local>>,
+    pub local_created_at: OptionParam<chrono::DateTime<Utc>>,
+    pub local_modified_at: OptionParam<chrono::DateTime<Utc>>,
 }
 
 impl AdriveOpenFileCreateRequest {
@@ -194,7 +194,7 @@ impl AdriveOpenFileCreateRequest {
 
     pub fn local_created_at(
         mut self,
-        local_created_at: impl Into<OptionParam<chrono::DateTime<Local>>>,
+        local_created_at: impl Into<OptionParam<chrono::DateTime<Utc>>>,
     ) -> Self {
         self.local_created_at = local_created_at.into();
         self
@@ -202,7 +202,7 @@ impl AdriveOpenFileCreateRequest {
 
     pub fn local_modified_at(
         mut self,
-        local_modified_at: impl Into<OptionParam<chrono::DateTime<Local>>>,
+        local_modified_at: impl Into<OptionParam<chrono::DateTime<Utc>>>,
     ) -> Self {
         self.local_modified_at = local_modified_at.into();
         self

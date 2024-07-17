@@ -1,5 +1,6 @@
 use crate::AlipanError;
-use chrono::Local;
+use chrono::serde::MicroSecondsTimestampVisitor;
+use chrono::{DateTime, Utc};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::{Deref, DerefMut};
 
@@ -197,8 +198,10 @@ pub struct AdriveOpenFileCreatePost {
     pub content_hash_name: Option<String>,
     pub proof_code: Option<String>,
     pub proof_version: Option<String>,
-    pub local_created_at: Option<chrono::DateTime<Local>>,
-    pub local_modified_at: Option<chrono::DateTime<Local>>,
+    #[serde(serialize_with = "dt_option_format::serialize")]
+    pub local_created_at: Option<chrono::DateTime<Utc>>,
+    #[serde(serialize_with = "dt_option_format::serialize")]
+    pub local_modified_at: Option<chrono::DateTime<Utc>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Eq, PartialEq)]
@@ -264,5 +267,20 @@ impl AdriveOpenFileStreamInfo {
     pub fn part_info_list(mut self, part_info_list: Vec<AdriveOpenFilePartInfoCreate>) -> Self {
         self.part_info_list = part_info_list;
         self
+    }
+}
+
+pub mod dt_option_format {
+    use chrono::{DateTime, Utc};
+    use serde::ser;
+    pub fn serialize<S>(dt: &Option<DateTime<Utc>>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ser::Serializer,
+    {
+        if let Some(dt) = dt {
+            serializer.serialize_str(dt.format("%Y-%m-%dT%H:%M:%S%.3fZ").to_string().as_str())
+        } else {
+            serializer.serialize_none()
+        }
     }
 }

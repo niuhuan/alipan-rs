@@ -672,3 +672,9 @@ impl PutResource {
         Body::from(bytes)
     }
 }
+
+#[test]
+fn test_time() {
+    let s = chrono::Utc::now().format("%Y-%m-%dT%H:%M:%S%.3fZ");
+    println!("{}", s);
+}

@@ -2,7 +2,7 @@ use crate::{
     response, AdriveOpenFilePartInfoCreate, BoxedAccessTokenLoader, LoadAccessToken, OptionParam,
 };
 use crate::{AdriveClient, Result};
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use std::sync::Arc;
 
@@ -105,7 +105,7 @@ pub struct AdriveOpenFileGetUploadUrl {
     pub drive_id: String,
     pub file_id: String,
     pub upload_id: String,
-    pub created_at: Option<chrono::DateTime<Local>>,
+    pub created_at: Option<chrono::DateTime<Utc>>,
     pub part_info_list: Vec<AdriveOpenFilePartInfoUpload>,
 }
 

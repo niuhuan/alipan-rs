@@ -3,7 +3,7 @@ use crate::{
     AccessTokenLoader, AdriveClient, AdriveOpenFileType, CheckNameMode, LoadAccessToken,
     OptionParam,
 };
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -135,6 +135,6 @@ pub struct AdriveOpenFileUpdate {
     #[serde(deserialize_with = "null_to_default")]
     pub category: String,
     pub r#type: AdriveOpenFileType,
-    pub created_at: chrono::DateTime<Local>,
-    pub updated_at: chrono::DateTime<Local>,
+    pub created_at: chrono::DateTime<Utc>,
+    pub updated_at: chrono::DateTime<Utc>,
 }

@@ -1,6 +1,6 @@
 use crate::response::null_to_default;
 use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OptionParam};
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -140,6 +140,6 @@ pub struct AdriveOpenFileBatchGetResponseItem {
     pub r#type: String,
     pub thumbnail: Option<String>,
     pub url: Option<String>,
-    pub created_at: chrono::DateTime<Local>,
-    pub updated_at: chrono::DateTime<Local>,
+    pub created_at: chrono::DateTime<Utc>,
+    pub updated_at: chrono::DateTime<Utc>,
 }

@@ -1,5 +1,5 @@
 use crate::AdriveOpenFileType;
-use chrono::Local;
+use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -27,8 +27,8 @@ pub struct AdriveOpenFile {
     pub r#type: AdriveOpenFileType,
     pub thumbnail: Option<String>,
     pub url: Option<String>,
-    pub created_at: chrono::DateTime<Local>,
-    pub updated_at: chrono::DateTime<Local>,
+    pub created_at: chrono::DateTime<Utc>,
+    pub updated_at: chrono::DateTime<Utc>,
     pub play_cursor: Option<String>,
     pub video_media_metadata: Option<Value>,
     pub video_preview_metadata: Option<Value>,
