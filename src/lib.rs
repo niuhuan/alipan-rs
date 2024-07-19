@@ -3,7 +3,6 @@ pub mod common;
 pub mod result;
 
 mod define;
-pub mod re_exports;
 #[cfg(test)]
 mod tests;
 
