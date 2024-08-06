@@ -1,6 +1,6 @@
 [package]
 name = "alipan"
-version = "0.0.17"
+version = "0.0.18"
 edition = "2021"
 description = "alipan sdk for rust"
 license = "MPL-2.0"
