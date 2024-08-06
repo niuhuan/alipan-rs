@@ -131,6 +131,15 @@ impl<T> From<T> for OptionParam<T> {
     }
 }
 
+impl<T> From<&T> for OptionParam<T>
+where
+    T: Clone,
+{
+    fn from(value: &T) -> Self {
+        OptionParam(Some(T::clone(value)))
+    }
+}
+
 impl From<&str> for OptionParam<String> {
     fn from(s: &str) -> Self {
         OptionParam(Some(s.to_string()))
