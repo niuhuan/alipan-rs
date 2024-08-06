@@ -29,9 +29,14 @@ pub struct AdriveOpenFile {
     pub url: Option<String>,
     pub created_at: chrono::DateTime<Utc>,
     pub updated_at: chrono::DateTime<Utc>,
+    /* only list */
     pub play_cursor: Option<String>,
     pub video_media_metadata: Option<Value>,
     pub video_preview_metadata: Option<Value>,
+    /* only get */
+    pub items: Option<Vec<Value>>,
+    pub id_path: Option<String>,
+    pub name_path: Option<String>,
 }
 
 pub fn null_to_default<'de, D, T>(deserializer: D) -> Result<T, D::Error>

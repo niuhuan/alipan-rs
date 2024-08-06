@@ -1,11 +1,7 @@
-use crate::response::null_to_default;
 use crate::{
-    response, AccessTokenLoader, AdriveClient, AdriveOpenFileType, Error, LoadAccessToken,
-    OptionParam,
+    response, AccessTokenLoader, AdriveClient, AdriveOpenFile, Error, LoadAccessToken, OptionParam,
 };
-use chrono::Utc;
 use serde_derive::{Deserialize, Serialize};
-use serde_json::Value;
 use std::ops::Deref;
 use std::sync::Arc;
 
@@ -108,7 +104,7 @@ pub struct AdriveOpenFileGetRequestPost {
 }
 
 impl AdriveOpenFileGetRequest {
-    pub async fn request(&self) -> crate::Result<AdriveOpenFileGet> {
+    pub async fn request(&self) -> crate::Result<AdriveOpenFile> {
         let params = AdriveOpenFileGetRequestPost {
             drive_id: if let Some(drive_id) = self.drive_id.deref() {
                 drive_id.clone()
@@ -135,28 +131,4 @@ impl AdriveOpenFileGetRequest {
             .await?;
         response(resp).await
     }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
-pub struct AdriveOpenFileGet {
-    pub drive_id: String,
-    pub file_id: String,
-    pub parent_file_id: String,
-    pub name: String,
-    #[serde(deserialize_with = "null_to_default")]
-    pub size: i64,
-    #[serde(deserialize_with = "null_to_default")]
-    pub file_extension: String,
-    #[serde(deserialize_with = "null_to_default")]
-    pub content_hash: String,
-    #[serde(deserialize_with = "null_to_default")]
-    pub category: String,
-    pub r#type: AdriveOpenFileType,
-    pub thumbnail: Option<String>,
-    pub url: Option<String>,
-    pub created_at: chrono::DateTime<Utc>,
-    pub updated_at: chrono::DateTime<Utc>,
-    pub items: Option<Vec<Value>>,
-    pub id_path: Option<String>,
-    pub name_path: Option<String>,
 }

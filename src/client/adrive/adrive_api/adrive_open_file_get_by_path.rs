@@ -1,5 +1,6 @@
-use crate::adrive_api::AdriveOpenFileGet;
-use crate::{response, AccessTokenLoader, AdriveClient, Error, LoadAccessToken, OptionParam};
+use crate::{
+    response, AccessTokenLoader, AdriveClient, AdriveOpenFile, Error, LoadAccessToken, OptionParam,
+};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -62,7 +63,7 @@ impl AdriveOpenFileGetByPathRequest {
 }
 
 impl AdriveOpenFileGetByPathRequest {
-    pub async fn request(&self) -> crate::Result<AdriveOpenFileGet> {
+    pub async fn request(&self) -> crate::Result<AdriveOpenFile> {
         let resp = self
             .agent
             .post(
