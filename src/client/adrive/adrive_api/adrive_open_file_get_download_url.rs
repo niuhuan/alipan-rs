@@ -1,4 +1,4 @@
-use crate::{AccessTokenLoader, AdriveClient, LoadAccessToken, OptionParam};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken, OptionParam};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -93,8 +93,7 @@ impl AdriveOpenFileGetDownloadUrlRequest {
             })
             .send()
             .await?;
-        let resp = resp.json::<AdriveOpenFileGetDownloadUrl>().await?;
-        Ok(resp)
+        response(resp).await
     }
 }
 

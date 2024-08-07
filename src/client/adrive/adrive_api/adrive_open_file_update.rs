@@ -1,6 +1,6 @@
 use crate::response::null_to_default;
 use crate::{
-    AccessTokenLoader, AdriveClient, AdriveOpenFileType, CheckNameMode, LoadAccessToken,
+    response, AccessTokenLoader, AdriveClient, AdriveOpenFileType, CheckNameMode, LoadAccessToken,
     OptionParam,
 };
 use chrono::Utc;
@@ -116,8 +116,7 @@ impl AdriveOpenFileUpdateRequest {
             })
             .send()
             .await?;
-        let resp = resp.json::<AdriveOpenFileUpdate>().await?;
-        Ok(resp)
+        response(resp).await
     }
 }
 

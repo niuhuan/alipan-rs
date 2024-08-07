@@ -1,4 +1,4 @@
-use crate::{AccessTokenLoader, AdriveClient, LoadAccessToken};
+use crate::{response, AccessTokenLoader, AdriveClient, LoadAccessToken};
 use serde_derive::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::Arc;
@@ -53,8 +53,7 @@ impl UserGetVipInfoRequest {
             .await?
             .send()
             .await?;
-        let resp = resp.json::<UserGetVipInfo>().await?;
-        Ok(resp)
+        response(resp).await
     }
 }
 
